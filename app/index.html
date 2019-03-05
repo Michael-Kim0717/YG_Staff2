@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> BYG Staff </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Materialize -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!-- Local Files -->
+        <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+        <script src="app.js"></script>
+    </head>
+    <body>
+        <div class="container mainContainer" id="i_container">
+            <h5 id="i_f_title"> Bethany Youth Group Staff Login </h5>
+            <div class="input-field col s12">
+                <input id="i_f_email" type="text" class="validate">
+                <label for="i_f_email"> Email Address </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="i_f_password" type="password" class="validate">
+                <label for="i_f_password"> Password </label>
+            </div>
+            <div id="i_f_loginError" class="submissionError">
+                
+            </div>
+            <a id="i_f_register" href="/register.html"> Register </a>
+            <button class="btn" id="i_f_login"> Login </button>
+        </div>
+        
+        <!-- Firebase Script -->
+        <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+
+        <!-- Materialize Script Added at the bottom for optimal loading. -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+</html>

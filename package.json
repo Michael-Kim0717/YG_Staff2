@@ -1,0 +1,19 @@
+{
+  "name": "byg-mentors",
+  "version": "1.0.0",
+  "description": "page for mentors to log in, fill in information, get updates",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Kim",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jquery": "^3.3.1",
+    "jsdom": "^13.2.0",
+    "nodemon": "^1.18.10",
+    "path": "^0.12.7"
+  }
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> BYG Staff </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Materialize -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!-- Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <!-- Local Files -->
+        <link rel="stylesheet" type="text/css" media="screen" href="../style.css">
+        <script src="../app.js"></script>
+    </head>
+    <body>
+        <button class="btn homeScreen"> <i class="medium material-icons"> home </i> </button>
+        
+        <div class="container mainContainer row" id="ml_container">
+            <h5 id="ml_title" class="center"> Log for </h5>
+            <h6 class="ml_section"> Please submit logs by the end of the day! </h6>
+            <h6 id="ml_error_section" style="color: red"> * Required </h6>
+            <div class="ml_section">
+                <h6> Grade: </h6>
+                <input disabled value="" id="ml_f_grade" type="text" class="validate">
+            </div>
+            <div class="input-field ml_section row">
+                <h6> Missing Students and Reason for Absence: </h6>
+                <div id="ml_f_student">
+                </div>
+            </div>
+            <div class="ml_section">
+                <h6> Small Group Reflection * </h6>
+                <textarea id="ml_f_sgReflection" class="materialize-textarea"></textarea>
+            </div>
+            <div class="ml_section">
+                <h6> Relational Log * </h6>
+                <textarea id="ml_f_relational" class="materialize-textarea"></textarea>
+            </div>
+            <div class="ml_section">
+                <h6> Prayer Request * </h6>   
+                <textarea id="ml_f_prayerRequest" class="materialize-textarea"></textarea> 
+            </div>
+            <div class="ml_section">
+                <h6> Questions for Pastor Mike </h6>    
+                <textarea id="ml_f_questionsPMike" class="materialize-textarea"></textarea>
+            </div>
+            <div id="ml_f_submissionError" class="submissionError">
+                
+            </div>
+            <button class="btn" id="ml_f_submitLog"> Submit </button>
+        </div>
+
+        <!-- Firebase Script -->
+        <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+
+        <!-- Materialize Script Added at the bottom for optimal loading. -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+</html>

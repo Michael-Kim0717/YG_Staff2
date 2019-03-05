@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> BYG Staff </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Materialize -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!-- Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <!-- Local Files -->
+        <link rel="stylesheet" type="text/css" media="screen" href="../style.css">
+        <script src="../app.js"></script>
+    </head>
+    <body>
+        <button class="btn homeScreen"> <i class="medium material-icons"> home </i> </button>
+        
+        <div class="container mainContainer" id="ad_container">
+            <h6 id="ad_error_section" class='error'> * Required </h6>
+            <h6 class="ad_f_title"> Add a Student </h6>
+            <div class="input-field col s12">
+                <input id="ad_f_name" type="text" class="validate">
+                <label for="ad_f_name"> Name * </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="ad_f_grade" type="text" class="validate ad_f_grade">
+                <label for="ad_f_grade"> Grade * </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="ad_f_address" type="text" class="validate">
+                <label for="ad_f_address"> Address </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="ad_f_city" type="text" class="validate ad_f_city">
+                <label for="ad_f_city"> City </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="ad_f_state" type="text" class="validate">
+                <label for="ad_f_state"> State </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="ad_f_birthday" type="date" class="validate">
+                <label for="ad_f_birthday"> Birthday </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="ad_f_email" type="email" class="validate">
+                <label for="ad_f_email"> Email Address </label>
+            </div>
+            <div class="input-field col s12">
+                <input id="ad_f_phoneNumber" type="number" class="validate">
+                <label for="ad_f_phoneNumber"> Phone Number </label>
+            </div>
+            <div id="ad_f_submissionError" class="submissionError">
+
+            </div>
+            <button class="btn" id="ad_f_addNewStudent"> Add Student </button>
+        </div>
+
+        <!-- Firebase Script -->
+        <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+        
+        <!-- Materialize Script Added at the bottom for optimal loading. -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+</html>
