@@ -9,34 +9,38 @@
         <!-- jQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+        <!-- Chart.js Implementation -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+
         <!-- Materialize -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!-- Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <!-- Local Files -->
         <link rel="stylesheet" type="text/css" media="screen" href="style.css">
         <script src="app.js"></script>
     </head>
     <body>
-        <div class="container mainContainer" id="i_container">
-            <h5 id="i_f_title"> Bethany Youth Group Staff Login </h5>
-            <div class="input-field col s12">
-                <input id="i_f_email" type="text" class="validate">
-                <label for="i_f_email"> Email Address </label>
-            </div>
-            <div class="input-field col s12">
-                <input id="i_f_password" type="password" class="validate">
-                <label for="i_f_password"> Password </label>
-            </div>
-            <div id="i_f_loginError" class="submissionError">
-                
-            </div>
-            <a id="i_f_register" href="/register.html"> Register </a>
-            <button class="btn" id="i_f_login"> Login </button>
-        </div>
-        
+        {{{body}}}
+
         <!-- Firebase Script -->
         <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
-
+        <script>
+            /* Firebase Credentials */
+            // Initialize Firebase
+            const config = {
+                apiKey: '{{config.apiKey}}',
+                authDomain: '{{config.authDomain}}',
+                databaseURL: '{{config.databaseURL}}',
+                projectId: '{{config.projectId}}',
+                storageBucket: '{{config.storageBucket}}',
+                messagingSenderId: '{{config.messagingSenderId}}',
+            }
+            firebase.initializeApp(config);
+        </script>
+        
         <!-- Materialize Script Added at the bottom for optimal loading. -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </body>

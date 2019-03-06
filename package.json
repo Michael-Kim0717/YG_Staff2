@@ -4,16 +4,19 @@
   "description": "page for mentors to log in, fill in information, get updates",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"node server.js\""
   },
   "author": "Michael Kim",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^6.2.0",
+    "envhandlebars": "^1.4.1",
     "express": "^4.16.4",
-    "jquery": "^3.3.1",
-    "jsdom": "^13.2.0",
-    "nodemon": "^1.18.10",
+    "express-handlebars": "^3.0.2",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
   }
 }
