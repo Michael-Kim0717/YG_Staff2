@@ -26,7 +26,6 @@ $(document).ready(setTimeout(() => {
         if (startOfWeekMonth < 10) {
             startOfWeekMonth = '0' + startOfWeekMonth;
         }
-        console.log("start of week: ", startOfWeekYear, startOfWeekMonth, startOfWeekDay);
         today = startOfWeekYear.toString() + startOfWeekMonth.toString() + startOfWeekDay.toString() + "-" + endOfWeek(parseInt(endOfWeekYear), parseInt(endOfWeekMonth), parseInt(today.getDate() + (6 - today.getDay())));
         
         return today;
@@ -50,7 +49,6 @@ $(document).ready(setTimeout(() => {
             year ++;
             month = "01";
         }
-        console.log("end of week: ", year, month, day);
         return year + "" + month + "" + day;
     }
 
@@ -59,7 +57,6 @@ $(document).ready(setTimeout(() => {
         /* Returns 20190406 from 20190331-20190406 
             Separates year, month, day respectively to 2019 04 06
         */
-        console.log(weekRange)
         let endOfWeek = weekRange.substring(9);
         let year = endOfWeek.substring(0, 4),
             month = endOfWeek.substring(4, 6),
@@ -123,7 +120,8 @@ $(document).ready(setTimeout(() => {
     const staffReference = firebase.database().ref('/Staff'),
         studentReference = firebase.database().ref('/Students'),
         breakfastReference = firebase.database().ref('/Breakfast/' + weekRange),
-        adminLogReference = firebase.database().ref('/Log/' + weekRange);
+        adminLogReference = firebase.database().ref('/Log/' + weekRange),
+        allLogsReference = firebase.database().ref('/Log');
 
     /* Get Current Logged in User */
     const user = firebase.auth().currentUser;
@@ -141,7 +139,6 @@ $(document).ready(setTimeout(() => {
                 }
             });
             
-            console.log(loggedInUser);
             moveAccordingly(loggedInUser.role);
 
             /* If the user is a mentor. */
@@ -151,7 +148,7 @@ $(document).ready(setTimeout(() => {
                     Check to see if the mentor has already completed log and/or breakfast.
                 */
                 if (href === origin + '/home') {
-                    $("#h_welcome").append(loggedInUser.name);
+                    $("#h_welcome").append(retrieveFirstName(loggedInUser.name));
 
                     adminLogReference.once('value', function(logSnapshot){
                         logSnapshot.forEach(function(childSnapshot) {
@@ -284,7 +281,6 @@ $(document).ready(setTimeout(() => {
                                         const id = $(this).attr('id');
                                         selected.push($(this).attr('name') + ": " + $("#" + id + "Absence").val());
                                     });
-                                    console.log(selected);
                                     const logDetails = {
                                         missingStudents: selected,
                                         reflection: $("#ml_f_sgReflection").val(),
@@ -432,7 +428,7 @@ $(document).ready(setTimeout(() => {
                     Add Admin specific pages to the home page.
                 */
                 if (href === origin + '/home') {
-                    $("#h_welcome").append(loggedInUser.name);
+                    $("#h_welcome").append(retrieveFirstName(loggedInUser.name));
 
                     $("#h_navigationContainer").append(
                         "<div id='addStudentNav' class='s10 offset-s1 navigation valign-wrapper'>" +
@@ -451,15 +447,33 @@ $(document).ready(setTimeout(() => {
                 else if (href === origin + '/log') {
                     $("#l_container").append(
                         "<h5 id='al_title'> Logs for </h5>" +
+                        "<button data-target='al_confirmationModal' id='al_sendMassEmail' class='btn modal-trigger' style='float: right;'> Send Mass Email </button>" +
                         "<div id='al_missingLogs'>" +
                             "<b> <h6> Missing Logs from : </h6> </b>" +
                         "</div>" +
                         "<ul id='al_logView' class='collapsible'>" +
-                        "</ul>"
+                        "</ul>" +
+
+                        "<hr>" +
+
+                        "<h5> Previous Logs: </h5>" +
+                        "<div id='al_previousLogs'> </div>" +
+                        
+                        "<div id='al_confirmationModal' class='modal'>" +
+                            "<div class='modal-content'>" +
+                                "<h4> CONFIRM </h4>" +
+                                "<p> This button will send a mass email to everyone who has yet to send in their logs. Are you sure? </p>" +
+                            "</div>" +
+                            "<div class='modal-footer'>" +
+                                "<button class='modal-close waves-effect waves-green btn red' id='al_confirmSendEmail'>Confirm</button>" +
+                            "</div>" +
+                        "</div>"
                     );
                     
                     /* Activate all collapsible list views */
                     $('.collapsible').collapsible();
+
+                    $('.modal').modal();
                     
                     /* View the logs for each grade. */
                     $("#al_title").append(getStartOfWeek(weekRange));
@@ -474,7 +488,6 @@ $(document).ready(setTimeout(() => {
                             "12B", "12G"
                         ];
                         log_snapshot.forEach(function(log_childSnapshot){
-                            console.log(log_childSnapshot.val());
                             $("#al_logView").append(
                                 "<li>" +
                                     "<div class='collapsible-header'>" + log_childSnapshot.key + "</div>" +
@@ -502,13 +515,83 @@ $(document).ready(setTimeout(() => {
                         })
                         for (let i = 0; i < missingLogs.length; i++){
                             if (i < missingLogs.length - 1) {
-                                missingLogs[i] += ', ';
+                                $("#al_missingLogs").append(
+                                    "<h6 class='al_missingLogGrade'> " + missingLogs[i] + ", </h6>"
+                                );
                             }
-                            $("#al_missingLogs").append(
-                                "<h6 class='al_missingLogGrade'> " + missingLogs[i] + " </h6>"
-                            );
+                            else {
+                                $("#al_missingLogs").append(
+                                    "<h6 class='al_missingLogGrade'> " + missingLogs[i] + " </h6>"
+                                );
+                            }
                         }
-                    })
+
+                        $("#al_confirmSendEmail").on("click", function(){
+                            alert("EXPERIMENTAL: Does nothing right now :)");
+                            staffReference.once('value', function(snapshot){
+                                console.log("List of Emails to Send to: ");
+                                snapshot.forEach(function (childSnapshot){
+                                    if (missingLogs.includes(childSnapshot.val().grade)){
+                                        console.log(childSnapshot.val().email);
+                                    }
+                                });
+                            });
+                        })
+                    });
+
+                    /* Prepend old logs */
+                    allLogsReference.once('value', function(snapshot){
+                        snapshot.forEach(function (childSnapshot) {
+                            if (childSnapshot.key !== weekRange) {
+                                let prevLogDiv = "";
+                                childSnapshot.forEach(function (childChildSnapshot){
+                                    let prevMissingStudents = "";
+    
+                                    if (undefined !== childChildSnapshot.val().missingStudents) {
+                                        for (let i = 0; i < childChildSnapshot.val().missingStudents.length; i++) {
+                                            prevMissingStudents += "<h6>" + childChildSnapshot.val().missingStudents[i] + "</h6>";
+                                        }
+                                    }
+    
+                                    prevLogDiv +=
+                                    "<li>" +
+                                        "<div class='collapsible-header'>" + childChildSnapshot.key + "</div>" +
+                                        "<div class='collapsible-body'>" +
+                                            "<span>" +
+                                                "<div class='" + childChildSnapshot.key + childSnapshot.key + "'>" +
+                                                    "<h6> <b> Missing Students: </b> </h6>" +
+                                                    prevMissingStudents +
+                                                "</div> <br/>" +
+                                                "<h6> <b> Small Group Reflection: </b> <br/>" + childChildSnapshot.val().reflection + "</h6> <br/>" +
+                                                "<h6> <b> Relational Log: </b> <br/>" + childChildSnapshot.val().relational + "</h6> <br/>" +
+                                                "<h6> <b> Prayer Request: </b> <br/>" + childChildSnapshot.val().prayerRequest + "</h6> <br/>" +
+                                                "<h6> <b> Questions for Pastor Mike: </b> <br/>" + childChildSnapshot.val().questionsPMike + "</h6> <br/>" +
+                                            "</span>" + 
+                                        "</div>" +
+                                    "</li>";
+                                });
+                                
+                                $("#al_previousLogs").prepend( 
+                                    "<ul class='collapsible'>" +
+                                        "<li>" +
+                                            "<div class='collapsible-header'> Logs for " + getStartOfWeek(childSnapshot.key) + "</div>" +
+                                            "<div class='collapsible-body'>" +
+                                                "<ul class='collapsible'>" + 
+                                                    prevLogDiv +
+                                                "</ul>" +
+                                            "</div>" +
+                                        "</li>" +
+                                    "</div>"
+                                );
+                                
+                                /* Activate all collapsible list views */
+                                $('.collapsible').collapsible();
+                            }
+                        });
+                        
+                        /* Activate all collapsible list views */
+                        $('.collapsible').collapsible();
+                    });
                 }
                 /* Admin Breakfast Page:
                     Append details to page.
@@ -701,12 +784,14 @@ $(document).ready(setTimeout(() => {
                 /* Admin Directory Page:
                     Append blueprint to container.
                     Get the prompted grade's directory.
+                    Implementation for a button to move everyone up one grade.
                 */
                 else if (href === origin + '/directory') {
                     $("#d_container").append(
                         "<h6 style='float: left;'> Grade Selection: </h6>" +
                         "<button id='ad_dropdownButton' class='dropdown-trigger btn' href='#' data-target='ad_grades'> - </button>" +
-    
+                        "<button data-target='ad_confirmationModal' id='ad_graduate' class='btn modal-trigger' style='float: right;'> Move Everyone One Grade Up </button>" +
+
                         "<ul id='ad_grades' class='dropdown-content'>" +
                             "<li class='ad_gradeSelection'> 6B </li> <li class='ad_gradeSelection'> 6G </li>" +
                             "<li class='ad_gradeSelection'> 7B </li> <li class='ad_gradeSelection'> 7G </li>" +
@@ -718,7 +803,17 @@ $(document).ready(setTimeout(() => {
                         "</ul>" +
                         
                         "<ul id='ad_studentView' class='collapsible'>" +
-                        "</ul>"
+                        "</ul>" +
+
+                        "<div id='ad_confirmationModal' class='modal'>" +
+                            "<div class='modal-content'>" +
+                                "<h4> CONFIRM </h4>" +
+                                "<p> This button is used to increase everyone's grade by 1. This action is irreversible and should only be done at the end of each school year. </p>" +
+                            "</div>" +
+                            "<div class='modal-footer'>" +
+                                "<button class='modal-close waves-effect waves-green btn red' id='ad_confirmGraduate'>Confirm</button>" +
+                            "</div>" +
+                        "</div>"
                     );
                     
                     /* Activate all collapsible list views */
@@ -763,8 +858,7 @@ $(document).ready(setTimeout(() => {
                                 }
                                 $("#" + student_childSnapshot.key + "Edit").on("click", function(){
                                     /* Check the Text of the 'Edit' button and work accordingly. */
-                                    if ($("#" + student_childSnapshot.key + "Edit").text().trim() === "Edit") {   
-                                        console.log("Editing " + "#" + student_childSnapshot.key + "Edit")
+                                    if ($("#" + student_childSnapshot.key + "Edit").text().trim() === "Edit") {
                                         $("#ad_f_" + student_childSnapshot.key).empty();
                                         $("#ad_f_" + student_childSnapshot.key).append(
                                             "<span>" +
@@ -809,7 +903,6 @@ $(document).ready(setTimeout(() => {
                                         $("#" + student_childSnapshot.key + "Edit").text("Confirm Edit");
                                         
                                         $("#" + student_childSnapshot.key + "Edit").on("click", function(){
-                                            console.log("Confirming Edit for " + "#" + student_childSnapshot.key + "Edit")
                                             const studentObject = {
                                                 name: $("#ad_f_name").val(),
                                                 grade: $("#ad_f_grade").val(),
@@ -837,6 +930,27 @@ $(document).ready(setTimeout(() => {
                                 });
                             })
                         })
+                    });
+
+                    /* Activate the Confirmation modal */
+                    $('.modal').modal();
+
+                    /* Increase ALL grades by 1 */
+                    $("#ad_confirmGraduate").on("click", function(){
+                        alert("EXPERIMENTAL: This button doesn't do anything as of now :)");
+                        staffReference.once('value', function(snapshot){
+                            console.log("List of Staff and Grade: ");
+                            snapshot.forEach(function(childSnapshot){
+                                console.log(childSnapshot.val().name, childSnapshot.val().grade, getNextGrade(childSnapshot.val().grade));
+                            });
+                        });
+                        studentReference.once('value', function(snapshot){
+                            console.log("-----------------------------");
+                            console.log("List of Students and Grade: ");
+                            snapshot.forEach(function(childSnapshot){
+                                console.log(childSnapshot.val().name, childSnapshot.val().grade, getNextGrade(childSnapshot.val().grade));
+                            });
+                        });
                     });
                 }
             }
@@ -913,6 +1027,31 @@ $(document).ready(setTimeout(() => {
             }
         }
 
+        /* Get the first name from the user */
+        function retrieveFirstName (name) {
+            return name.substring(0, name.indexOf(" "));
+        }
+
+        /* Retrieve the following grade */
+        function getNextGrade (grade) {
+            if (undefined !== grade) {
+                switch (grade.length) {
+                    case 2 :
+                        return parseInt(grade.substring(0, 1)) + 1 + grade.substring(1);
+                    case 3 :
+                        const gradeNum = parseInt(grade.substring(0,2)) + 1;
+                        if (gradeNum == 13) {
+                            return "grad";
+                        }
+                        else {
+                            return gradeNum + grade.substring(2);
+                        }
+                    default :
+                        break;
+                }
+            }
+        }
+
     /* Registration Page Functionality */
         /* Registration button functionality */
         $("#r_f_register").on("click", function(){
@@ -943,13 +1082,12 @@ $(document).ready(setTimeout(() => {
                 else {
                     /* ERROR CONDITION: Check if the registration code is correct */
                     /* TODO: Fill in .env variables. */
-                    if (registrationCode === '0000') {
+                    if (registrationCode === '3880') {
                         /* ERROR CONDITION: Check if the user email exists in the database */
                         staffReference.once('value', function(snapshot){
                             snapshot.forEach(function(childSnapshot){
                                 if (email.toLowerCase() === (childSnapshot.val().email).toLowerCase()){
                                     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-                                        console.log(error.message);
                                         $("#r_f_registrationError").empty();
                                         $("#r_f_registrationError").append(
                                             "<p class='error'>" +
