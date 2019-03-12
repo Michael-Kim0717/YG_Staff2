@@ -34,10 +34,18 @@ module.exports = app => {
     app.get('/thankYou', (request, response) => {
         response.render('mentorPages/thankYou');
     });
+    
+    app.get('/feedback', (request, response) => {
+        response.render('mentorPages/feedback');
+    });
 
     /* Admin Pages */
     app.get('/addStudent', (request, response) => {
         response.render('adminPages/addStudent');
+    });
+
+    app.get('/staffDirectory', (request, response) => {
+        response.render('adminPages/staffDirectory');
     });
 
 }

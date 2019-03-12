@@ -71,6 +71,15 @@
     #h_welcome {
         text-align: center;
     }
+    
+    #whatsNewContainer {
+        margin: 3vh auto;
+        width: 80%;
+    }
+
+    .changeLogHR {
+        margin: 3vh 0;
+    }
 
     .navigation {
         border: 1px solid black;
@@ -192,4 +201,9 @@
     #np_backHome {
         display: block;
         margin: 0 auto;
+    }
+
+/* Feedback Page */
+    #mf_container {
+        padding-bottom: 75px;
     }

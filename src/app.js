@@ -121,7 +121,8 @@ $(document).ready(() => {
         studentReference = firebase.database().ref('/Students'),
         breakfastReference = firebase.database().ref('/Breakfast/' + weekRange),
         adminLogReference = firebase.database().ref('/Log/' + weekRange),
-        allLogsReference = firebase.database().ref('/Log');
+        allLogsReference = firebase.database().ref('/Log'),
+        feedbackReference = firebase.database().ref('/Feedback');
 
     /* Get Current Logged in User */
     let loggedInUser = {};
@@ -151,24 +152,54 @@ $(document).ready(() => {
                         const welcomeText = "Welcome " + retrieveFirstName(loggedInUser.name);
                         let logNavText = "Log";
                         let breakfastNavText = "Breakfast";
+                        const whatsNewText = 
+                            "<ul class='collapsible'>" +
+                                "<li>" +
+                                    "<div class='collapsible-header'> March 2019 </div>" +
+                                    "<div class='collapsible-body'>" +
+                                        "<h6> March 12th (Tuesday) </h6> " +
+                                        "<h6> Added a feedback page to help resolve issues. </h6>" +
+                                        "<h6> Fixed a bug with submitting breakfast. </h6>" +
+                                        "<h6> Fixed an issue where 'Completed' wasn't showing up after completing a form. </h6> <hr class='changeLogHR'/>" +
+                                        "<h6> March 11th (Monday) </h6> " +
+                                        "<h6> Some loading optimizations. Things should now be a little smoother. </h6>" +
+                                    "</div>" +
+                                "</li>" +
+                            "</ul>"
     
                         adminLogReference.once('value', function(logSnapshot){
                             logSnapshot.forEach(function(childSnapshot) {
                                 if (childSnapshot.key === loggedInUser.grade) {
-                                    logNavText = "Completed";
+                                    $("#logNavText").empty();
+                                    $("#logNavText").append(
+                                        "Completed"
+                                    );
                                 }
                             })
                         });                    
                         firebase.database().ref('/Breakfast/' + weekRange + '/completed').once('value', function(breakfastSnapshot){
                             breakfastSnapshot.forEach(function(childSnapshot) {
                                 if (childSnapshot.val() === loggedInUser.name.substring(0, 4) + loggedInUser.grade) {
-                                    breakfastNavText = "Completed";
+                                    $("#breakfastNavText").empty();
+                                    $("#breakfastNavText").append(
+                                        "Completed"
+                                    );
                                 }
                             })
                         });
 
                         $("#h_navigationContainer").append(
                             "<h5 id='h_welcome'>" + welcomeText + "</h5>" +
+                            
+                            "<ul id='whatsNewContainer' class='collapsible'>" +
+                                "<li>" +
+                                    "<div class='collapsible-header'> What's New? </div>" +
+                                    "<div class='collapsible-body'>" +
+                                        whatsNewText +
+                                    "</div>" +
+                                "</li>" +
+                            "</ul>" +
+
                             "<div id='logNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                                 "<h3 id='logNavText' class='navigationText'>" + logNavText + "</h3>" +
                             "</div>" +
@@ -177,8 +208,13 @@ $(document).ready(() => {
                             "</div>" +
                             "<div id='directoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                                 "<h3 class='navigationText'> Directory </h3>" +
+                            "</div>" +
+                            "<div id='feedbackNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                                "<h3 class='navigationText'> Feedback/Help </h3>" +
                             "</div>"
                         );
+
+                        $(".collapsible").collapsible();
 
                         /* Navigate according to login status */
                         $("#logNav").on("click", function(){
@@ -194,6 +230,9 @@ $(document).ready(() => {
                         $("#directoryNav").on("click", function(){
                             window.location.href = "/directory"; 
                         });
+                        $("#feedbackNav").on("click", function(){
+                            window.location.href = "/feedback";
+                        })
                     }
                     /* Mentor Log Page:
                         Append form to container.
@@ -360,7 +399,7 @@ $(document).ready(() => {
                         /* Submit Breakfast */
                         $("#mb_f_submitBreakfast").on("click", function(){
                             let currentBreakfast = {
-                                bagel: 0,
+                                bagels: 0,
                                 coffee: 0,
                                 fruits: 0,
                                 orangeJuice: 0,
@@ -446,6 +485,25 @@ $(document).ready(() => {
                             })
                         })
                     }
+                    /* Mentor Feedback Page:
+                        Append blueprint to container.
+                    */
+                    else if (href === origin + '/feedback') {
+                        $("#mf_container").append(
+                            "<h5 id='mf_f_title' class='center'> If you have any issues or improvements you want to see made, please write them below. Thanks! </h5>" +
+                            "<div class='input-field col s12'>" +
+                                "<textarea id='mf_f_feedbackField' class='materialize-textarea'></textarea>" +
+                            "</div>" +
+                            "<button class='btn right' id='mf_f_submitFeedback'> Submit </button>"
+                        );
+
+                        M.textareaAutoResize($('#m_f_feedbackField'));
+
+                        $("#mf_f_submitFeedback").on("click", function(){
+                            feedbackReference.push().set({name: loggedInUser.name, feedback: $("#mf_f_feedbackField").val()});
+                            window.location.href = "/thankYou";
+                        });
+                    }
                 }
                 /* If the user is an admin */
                 else if (loggedInUser.role === 'admin') {
@@ -455,9 +513,34 @@ $(document).ready(() => {
                     */
                     if (href === origin + '/home') {
                         const welcomeText = "Welcome " + retrieveFirstName(loggedInUser.name);
-    
+                        const whatsNewText =
+                            "<ul class='collapsible'>" +
+                                "<li>" +
+                                    "<div class='collapsible-header'> March 2019 </div>" +
+                                    "<div class='collapsible-body'>" +
+                                        "<h6> March 12th (Tuesday) </h6> " +
+                                        "<h6> The button to shift everyone up one grade has been fully implemented. </h6>" +
+                                        "<h6> Added a Staff Directory page that shows ONLY mentors. </h6> " +
+                                        "<h6> Fixed an issue where the bar for Yogurt was not showing up in the Breakfast page. </h6> <hr class='changeLogHR'/>" +
+                                        "<h6> March 11th (Monday) </h6> " +
+                                        "<h6> Fixed an issue with log dates. Starting next Sunday, it should show all logs properly in one week range. </h6>" +
+                                        "<h6> Some loading optimizations. Things should now be a little smoother. </h6>" +
+                                    "</div>" +
+                                "</li>" +
+                            "</ul>"
+                        
                         $("#h_navigationContainer").append(
                             "<h5 id='h_welcome'>" + welcomeText + "</h5>" +
+
+                            "<ul id='whatsNewContainer' class='collapsible'>" +
+                                "<li>" +
+                                    "<div class='collapsible-header'> What's New? </div>" +
+                                    "<div class='collapsible-body'>" +
+                                        whatsNewText +
+                                    "</div>" +
+                                "</li>" +
+                            "</ul>" +
+
                             "<div id='logNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                                 "<h3 id='logNavText' class='navigationText'> Log </h3>" +
                             "</div>" +
@@ -465,16 +548,17 @@ $(document).ready(() => {
                                 "<h3 id='breakfastNavText' class='navigationText'> Breakfast </h3>" +
                             "</div>" +
                             "<div id='directoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
-                                "<h3 class='navigationText'> Directory </h3>" +
+                                "<h3 class='navigationText'> Student Directory </h3>" +
                             "</div>" +
                             "<div id='addStudentNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                                 "<h3 class='navigationText'> Add Student </h3>" +
+                            "</div>" +
+                            "<div id='staffDirectoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                                "<h3 class='navigationText'> Staff Directory </h3>" +
                             "</div>"
                         );
-    
-                        $("#addStudentNav").on("click", function(){
-                            window.location.href = "/addStudent";     
-                        });
+
+                        $(".collapsible").collapsible();
 
                         /* Navigate according to login status */
                         $("#logNav").on("click", function(){
@@ -485,6 +569,12 @@ $(document).ready(() => {
                         });
                         $("#directoryNav").on("click", function(){
                             window.location.href = "/directory"; 
+                        });
+                        $("#addStudentNav").on("click", function(){
+                            window.location.href = "/addStudent";     
+                        });
+                        $("#staffDirectoryNav").on("click", function(){
+                            window.location.href = "/staffDirectory";
                         });
                     }
                     /* Admin Log Page:
@@ -650,7 +740,7 @@ $(document).ready(() => {
                                                     "</ul>" +
                                                 "</div>" +
                                             "</li>" +
-                                        "</div>"
+                                        "</ul>"
                                     );
                                     
                                     /* Activate all collapsible list views */
@@ -688,7 +778,9 @@ $(document).ready(() => {
                                     others = childSnapshot.val();
                                 }
                                 else {
-                                    chartData.push(childSnapshot.val());
+                                    if (childSnapshot.key !== 'completed') {
+                                        chartData.push(childSnapshot.val());
+                                    }
                                 }
                             });
                             
@@ -1007,15 +1099,17 @@ $(document).ready(() => {
     
                         /* Increase ALL grades by 1 */
                         $("#ad_confirmGraduate").on("click", function(){
-                            alert("EXPERIMENTAL: This button doesn't do anything as of now :)");
+                            alert("ALL Staff and Students will now be updated.");
                             staffReference.once('value', function(snapshot){
                                 console.log("List of Staff and Grade: ");
                                 snapshot.forEach(function(childSnapshot){
                                     if (undefined !== childSnapshot.val().grade) {
                                         console.log(childSnapshot.val().name, childSnapshot.val().grade, getNextGrade(childSnapshot.val().grade));
-                                        if (childSnapshot.val().grade > 0) {
-                                            /* THIS CODE UPDATES JUST THE GRADE FOR THE GIVEN CHILDSNAPSHOT.KEY */
-                                            firebase.database().ref('/Staff/' + childSnapshot.key).update({grade: 2});
+                                        if (getNextGrade(childSnapshot.val().grade) === 'grad') {
+                                            firebase.database().ref('/Staff/' + childSnapshot.key).remove();
+                                        }
+                                        else {
+                                            firebase.database().ref('/Staff/' + childSnapshot.key).update({grade: getNextGrade(childSnapshot.val().grade)});
                                         }
                                     }
                                 });
@@ -1025,9 +1119,46 @@ $(document).ready(() => {
                                 console.log("List of Students and Grade: ");
                                 snapshot.forEach(function(childSnapshot){
                                     console.log(childSnapshot.val().name, childSnapshot.val().grade, getNextGrade(childSnapshot.val().grade));
+                                    if (getNextGrade(childSnapshot.val().grade) === 'grad') {
+                                        firebase.database().ref('/Students/' + childSnapshot.key).remove();
+                                    }
+                                    else {
+                                        firebase.database().ref('/Students/' + childSnapshot.key).update({grade: getNextGrade(childSnapshot.val().grade)});
+                                    }
                                 });
                             });
                         });
+                    }
+                    else if (href === origin + '/staffdirectory') {
+                        $("#asd_container").append(
+                            "<ul id='asd_staffView' class='collapsible'>" +
+                            "</ul>"
+                        );
+
+                        staffReference.once('value', function(snapshot) {
+                            snapshot.forEach(function (childSnapshot){
+                                if (childSnapshot.val().role === 'mentor') {
+                                    $("#asd_staffView").append(
+                                        "<li>" +
+                                            "<div class='collapsible-header'>" + childSnapshot.val().name + " </div>" +
+                                            "<div class='collapsible-body'>" +
+                                                "<span>" +
+                                                    "<h6> <b> Grade: </b> </h6>" +
+                                                    "<h6>" + childSnapshot.val().grade + "</h6>" +
+                                                    "<h6> <b> Email: </b> </h6>" +
+                                                    "<h6>" + childSnapshot.val().email + "</h6>" +
+                                                    "<h6> <b> Role: </b> </h6>" +
+                                                    "<h6>" + childSnapshot.val().role + "</h6>" +
+                                                "</span>" +
+                                            "</div>" +
+                                        "</li>"
+                                    );
+                                }
+                            });
+                            $("#asd_staffView").append(staffView);
+                        });
+
+                        $(".collapsible").collapsible();
                     }
                 }
     
@@ -1079,6 +1210,7 @@ $(document).ready(() => {
                         window.location.href = "/home";
                         break;
                     case origin + "/thankyou" :
+                    case origin + "/feedback" :
                         window.location.href = "/noPermission";
                         break;
                 }
@@ -1090,6 +1222,7 @@ $(document).ready(() => {
                         window.location.href = "/home";
                         break;
                     case origin + "/addstudent" :
+                    case origin + "/staffdirectory" :
                         window.location.href = "/noPermission";
                         break;
                 }
@@ -1101,7 +1234,9 @@ $(document).ready(() => {
                     case origin + "/breakfast" :
                     case origin + "/directory" :
                     case origin + "/addstudent" :
+                    case origin + "/staffdirectory" :
                     case origin + "/thankyou" :
+                    case origin + "/feedback" :
                         window.location.href = "/noPermission";
                         break;
                 }
