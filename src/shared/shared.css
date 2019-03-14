@@ -1,0 +1,62 @@
+/* Log */
+    /* Admin */
+    .al_missingLogGrade {
+        display: inline;
+    }
+
+    #al_missingLogs {
+        margin: 3vh 0 1vh 0;
+    }
+    
+    #al_sendMassEmail {
+        margin: 1vh 2vw 1vh 0;
+    }
+
+    /* Mentor */
+    .ml_section {
+        margin: 3vh 5vw;
+    }
+
+    #ml_error_section {
+        margin: 5vh 5vw;
+    }
+
+    #ml_f_submitLog {
+        float: right;
+        margin: 2vh 5vw;
+    }
+
+/* Breakfast */
+    /* Admin */
+    #ab_container {
+        width: 60%;
+    }
+
+    /* Mentor */
+    .breakfastForm {
+        padding-bottom: 75px;
+    }
+
+    .breakfastForm p {
+        padding: 1.5vh 0;
+    }
+
+    #mb_f_submitBreakfast {
+        float: right;
+        margin-right: 2vw;
+    }
+
+/* Directory */
+    /* Admin */
+    #ad_dropdownButton {
+        margin-left: 2vw;
+    }
+
+    #ad_graduate {
+        display: block;
+        margin: 0 auto;
+    }
+    
+    .ad_gradeSelection {
+        text-align: center !important;
+    }

@@ -19,6 +19,11 @@ app.locals.config = {
     messagingSenderId: process.env.messagingSenderId
 }
 
+app.locals.analytics = {
+    URL: process.env.analyticsURL,
+    gTag: process.env.gTag
+}
+
 router(app);
 
 app.engine('handlebars', expressHandlebars({

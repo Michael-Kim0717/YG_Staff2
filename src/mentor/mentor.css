@@ -1,0 +1,19 @@
+/* Thank You Page */
+    #ty_container {
+        margin-top: 20vh;
+    }
+
+    #ty_text {
+        padding-bottom: 3vh;
+        text-align: center;
+    }
+
+    #mty_backHome {
+        display: block;
+        margin: 0 auto;
+    }
+
+/* Feedback Page */
+    #mf_container {
+        padding-bottom: 75px;
+    }

@@ -1,0 +1,22 @@
+/* Add a Student Page */
+
+    #ad_container {
+        padding-bottom: 100px;
+    }
+
+    #ad_container .input-field {
+        margin: 3vh 5vw;
+    }
+
+    .ad_f_title {
+        margin: 0 0 5vh 5vw;
+    }
+
+    #ad_error_section {
+        margin: 7vh 5vw;
+    }
+
+    #ad_f_addNewStudent {
+        float: right;
+        margin-right: 5vw;
+    }
