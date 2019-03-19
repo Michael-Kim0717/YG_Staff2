@@ -1,5 +1,9 @@
 /* Log */
     /* Admin */
+    #al_logView .collapsible-header {
+        background-color: #efe7de;
+    }
+
     .al_missingLogGrade {
         display: inline;
     }
@@ -47,6 +51,10 @@
     }
 
 /* Directory */
+    #d_container .collapsible-header {
+        background-color: #efe7de;
+    }
+
     /* Admin */
     #ad_dropdownButton {
         margin-left: 2vw;

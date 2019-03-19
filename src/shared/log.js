@@ -8,6 +8,8 @@ $(document).ready(function(){
     const adminLogReference = firebase.database().ref('/Log/' + weekRange);
     const allLogsReference = firebase.database().ref('/Log');
 
+    $("#nb_return").text("HOME");
+
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
         if (user) {
@@ -40,7 +42,7 @@ $(document).ready(function(){
                 Submit log button functionality.
             */
             $("#l_container").append(
-                "<h5 id='ml_title' class='center'> Log for </h5>" +
+                "<h5 id='ml_title' class='center title'> Log for </h5>" +
                 "<h6 class='ml_section'> Please submit logs by the end of the day! </h6>" +
                 "<h6 id='ml_error_section' style='color: red'> * Required </h6>" +
                 "<div class='ml_section'>" +
@@ -164,7 +166,7 @@ $(document).ready(function(){
                 Append logs from database.
             */
             $("#l_container").append(
-                "<h5 id='al_title'> Logs for </h5>" +
+                "<h5 id='al_title' class='center title'> Logs for </h5>" +
                 "<div id='al_missingLogs'>" +
                     "<b> <h6> Missing Logs from : </h6> </b>" +
                 "</div>" +
@@ -202,6 +204,7 @@ $(document).ready(function(){
                     "11B", "11G", 
                     "12B", "12G"
                 ];
+                let allLogs = {};
                 log_snapshot.forEach(function(log_childSnapshot){
                     $("#al_logView").append(
                         "<li>" +
@@ -219,15 +222,42 @@ $(document).ready(function(){
                             "</div>" +
                         "</li>"
                     );
+                    allLogs[log_childSnapshot.key] = log_childSnapshot.val().reflection + " " +
+                        log_childSnapshot.val().relational + " " +
+                        log_childSnapshot.val().prayerRequest + " " +
+                        log_childSnapshot.val().questionsPMike + " ";
                     if (undefined !== log_childSnapshot.val().missingStudents) {
                         for (let i = 0; i < log_childSnapshot.val().missingStudents.length; i++) {
                             $("." + log_childSnapshot.key + weekRange).append(
                                 "<h6>" + log_childSnapshot.val().missingStudents[i] + "</h6>"
                             )
+                            allLogs[log_childSnapshot.key] += log_childSnapshot.val().missingStudents[i] + " ";
                         }
                     }
                     missingLogs = removeElementFromArray(missingLogs, log_childSnapshot.key);
                 })
+
+                /* Send Logs to Pastor Mike */
+                $("#al_sendLogs").on("click", function() {
+                    console.log(missingLogs);
+                    if (missingLogs.length === 0){
+                        $("#al_logSendError").empty();
+                        $("#al_logSendError").appen(
+                            "<h6 class='error-noSideMargin'> NOT IMPLEMENTED YET. </h6>"
+                        );
+                        $.ajax("/sendLogsToPMike", {
+                            type: "POST",
+                            data: allLogs
+                        })
+                    }
+                    else {
+                        $("#al_logSendError").empty();
+                        $("#al_logSendError").append(
+                            "<h6 class='error-noSideMargin'> Logs are currently missing </h6>"
+                        );
+                    }
+                });
+
                 for (let i = 0; i < missingLogs.length; i++){
                     if (i < missingLogs.length - 1) {
                         $("#al_missingLogs").append(
@@ -242,33 +272,23 @@ $(document).ready(function(){
                 }
 
                 $("#al_confirmSendEmail").on("click", function(){
-                    alert("EXPERIMENTAL: Does nothing right now :)");
+                    let emailList = {},
+                        index = 0;
                     staffReference.once('value', function(snapshot){
                         console.log("List of Emails to Send to: ");
                         snapshot.forEach(function (childSnapshot){
                             if (missingLogs.includes(childSnapshot.val().grade)){
-                                console.log(childSnapshot.val().email);
+                                emailList[index] = childSnapshot.val().email;
+                                index++;
                             }
+                        });
+                        console.log(emailList);
+                        $.ajax("/sendMassEmail", {
+                            type: 'POST',
+                            data: emailList
                         });
                     });
                 })
-
-                /* Send Logs to Pastor Mike */
-                $("#al_sendLogs").on("click", function() {
-                    console.log(missingLogs);
-                    if (missingLogs.length === 0){
-                        $("#al_logSendError").empty();
-                        $("#al_logSendError").append(
-                            "<h6 class='error-noSideMargin'> NOT IMPLEMENTED YET </h6>"
-                        );
-                    }
-                    else {
-                        $("#al_logSendError").empty();
-                        $("#al_logSendError").append(
-                            "<h6 class='error-noSideMargin'> Logs are currently missing </h6>"
-                        );
-                    }
-                });
             });
 
             /* Delete all logs that are not within the current week. */
@@ -383,7 +403,7 @@ $(document).ready(function(){
     }
 
     /* Navigate back to Home Screen */
-    $(".homeScreen").on("click", function(){
+    $("#nb_return").on("click", function(){
         window.location.href = "/home";
     });
 

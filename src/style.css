@@ -1,19 +1,42 @@
+/* NavBar */
+    nav {
+        background-color: #323132;
+    }
+
+    nav a {
+        font-family: 'work sans', sans-serif;
+    }
+
+    nav ul {
+        margin-right: 5vw;
+    }
+
+    nav .brand-logo {
+        font-family: 'work sans', sans-serif;
+        margin-left: 5vw;
+    }
+
 /* General */
     * {
         font-family: 'Crimson Text';
+        color: #2c597b;
     }
 
     body {
-        background-color: #ffefd5;
+        background-color: #e8e0d6;
     }
     
     .mainContainer {
-        background-color: #f1f1f1;
+        /* background-color: #f1f1f1;
         border: 1px solid black;
-        border-radius: 5px;
+        border-radius: 5px; */
         margin-top: 10vh;
         margin-bottom: 10vh;
         padding: 35px;
+    }
+
+    .title {
+        font-family: 'Lora', serif;
     }
 
     .error {
@@ -29,4 +52,16 @@
     .success {
         color: #3CB371;
         margin: 3vh 5vw;
+    }
+
+    .btn {
+        background-color: #323132;
+    }
+
+    .btn:hover {
+        background-color: #696969;
+    }
+
+    .btn:active {
+        background-color: #696969;
     }

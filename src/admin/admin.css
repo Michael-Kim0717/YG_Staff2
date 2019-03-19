@@ -20,3 +20,9 @@
         float: right;
         margin-right: 5vw;
     }
+
+/* Staff Directory */
+
+    #asd_staffView .collapsible-header {
+        background-color: #efe7de;
+    }

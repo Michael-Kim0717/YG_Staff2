@@ -3,6 +3,8 @@ $(document).ready(function(){
     const staffReference = firebase.database().ref('/Staff');
     const feedbackReference = firebase.database().ref('/Feedback');
 
+    $("#nb_return").text("HOME");
+
     /* Get Current Logged in User */
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
@@ -16,7 +18,6 @@ $(document).ready(function(){
                             name: childSnapshot.val().name,
                             role: childSnapshot.val().role
                         };
-                        moveAccordingly(loggedInUser.role);
                     }
                 }); 
                 
@@ -26,19 +27,28 @@ $(document).ready(function(){
                     feedbackReference.push().set({name: loggedInUser.name, feedback: $("#mf_f_feedbackField").val()});
                     window.location.href = "/thankYou";
                 });
+
+                /* Navigate back to Home Screen */
+                $("#nb_return").on("click", function(){
+                    window.location.href = "/home";
+                });
+
             });
         }
         else {
-            moveAccordingly("none");
+            appendPage();
+                
+            $("#mf_f_submitFeedback").on("click", function(){
+                feedbackReference.push().set({name: "Anonymous", feedback: $("#mf_f_feedbackField").val()});
+                window.location.href = "/thankYou";
+            });
+            
+            /* Navigate back to Home Screen */
+            $("#nb_return").on("click", function(){
+                window.location.href = "/";
+            });
         }
     });
-
-    /* Check if user is logged in and move them accordingly. */
-    function moveAccordingly (role) {
-        if (role !== "mentor") {
-            window.location.href = "/noPermission";
-        }
-    }
 
     function appendPage() {
         $("#mf_container").append(
@@ -49,10 +59,4 @@ $(document).ready(function(){
             "<button class='btn right' id='mf_f_submitFeedback'> Submit </button>"
         );
     }
-
-    /* Navigate back to Home Screen */
-    $(".homeScreen").on("click", function(){
-        window.location.href = "/home";
-    });
-
 });

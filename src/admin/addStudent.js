@@ -3,6 +3,8 @@ $(document).ready(function(){
     const studentReference = firebase.database().ref('/Students');
     const staffReference = firebase.database().ref('/Staff');
 
+    $("#nb_return").text("HOME");
+
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
         if (user) {
@@ -127,7 +129,7 @@ $(document).ready(function(){
                 "<label for='ad_f_email'> Email Address </label>" +
             "</div>" +
             "<div class='input-field col s12'>" +
-                "<input id='ad_f_phoneNumber' type='number' class='validate'>" +
+                "<input id='ad_f_phoneNumber' type='text' class='validate'>" +
                 "<label for='ad_f_phoneNumber'> Phone Number </label>" +
             "</div>" +
             "<div id='ad_f_submissionError' class='submissionError'>" +
@@ -152,7 +154,7 @@ $(document).ready(function(){
     }
 
     /* Navigate back to Home Screen */
-    $(".homeScreen").on("click", function(){
+    $("#nb_return").on("click", function(){
         window.location.href = "/home";
     });
 

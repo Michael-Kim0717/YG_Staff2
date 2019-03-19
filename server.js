@@ -2,6 +2,7 @@
 const 
     router = require('./controllers/router.js'),
 
+    body = require('body-parser'),
     express = require('express'),
     expressHandlebars = require('express-handlebars'),
     path = require('path');
@@ -24,15 +25,17 @@ app.locals.analytics = {
     gTag: process.env.gTag
 }
 
-router(app);
-
 app.engine('handlebars', expressHandlebars({
     defaultLayout:'main',
     partialsDir: __dirname + '/views/partials/'
 }));
 app.set('view engine','handlebars');
-
 app.use(express.static(path.join(__dirname, 'src')));
+
+app.use(body.json());
+app.use(body.urlencoded({ extended: true }));
+
+router(app);
 
 /* PORT */
 const PORT = process.env.PORT || 8001;

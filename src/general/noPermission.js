@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    $("#nb_return").text("HOME");
+
     /* Get Current Logged in User */
     firebase.auth().onAuthStateChanged(function (user){
         let loggedIn = false;
@@ -10,6 +12,10 @@ $(document).ready(function(){
         $("#np_backHome").on("click", function(){
             window.location.href = loggedIn === true ? "/home" : "/";
         });
+    });
+
+    $("#nb_return").on("click", function(){
+        window.location.href = "/home";
     });
 
 });

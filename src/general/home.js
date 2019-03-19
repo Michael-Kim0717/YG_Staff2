@@ -6,6 +6,8 @@ $(document).ready(function(){
     const staffReference = firebase.database().ref('/Staff');
     const adminLogReference = firebase.database().ref('/Log/' + weekRange);
 
+    $("#nb_return").text("LOGOUT");
+
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
         if (user) {
@@ -68,7 +70,7 @@ $(document).ready(function(){
             });
 
             $("#h_navigationContainer").append(
-                "<h5 id='h_welcome'>" + welcomeText + "</h5>" +
+                "<h5 id='h_welcome' class='title'>" + welcomeText + "</h5>" +
                 
                 "<ul id='whatsNewContainer' class='collapsible'>" +
                     "<li>" +
@@ -87,9 +89,6 @@ $(document).ready(function(){
                 "</div>" +
                 "<div id='directoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 class='navigationText'> Directory </h3>" +
-                "</div>" +
-                "<div id='feedbackNav' class='s10 offset-s1 navigation valign-wrapper'>" +
-                    "<h3 class='navigationText'> Feedback/Help </h3>" +
                 "</div>"
             );
 
@@ -109,9 +108,6 @@ $(document).ready(function(){
             $("#directoryNav").on("click", function(){
                 window.location.href = "/directory"; 
             });
-            $("#feedbackNav").on("click", function(){
-                window.location.href = "/feedback";
-            })
         }
         else if (role === 'admin') {
             /* Admin Home Page: 
@@ -119,12 +115,15 @@ $(document).ready(function(){
                 Add Admin specific pages to the home page.
             */
             const whatsNewText =
+                "<h6> March 18th (Monday) </h6> " +
+                "<h6> Added the ability to send an email to people who have NOT submitted logs yet. The issue is the email may be sent to their junk/spam folder until we receive a domain. </h6> <hr class='changeLogHR'/>" +
                 "<h6> March 14th (Thursday) </h6> " +
                 "<h6> Previous week's breakfast will now be automatically deleted once Monday rolls around. </h6>" +
                 "<h6> Removed access to previous logs. Previous logs will now be automatically deleted once the following Sunday rolls around. </h6>" +
-                "<h6> Changed Breakfast Chart to Horizontal from Vertical for readability </h6>" +
-                "<h6> Fixed an issue where Add Student was not showing up </h6> <hr class='changeLogHR'/>" +
+                "<h6> Changed Breakfast Chart to Horizontal from Vertical for readability. </h6>" +
+                "<h6> Fixed an issue where Add Student was not showing up. </h6> <hr class='changeLogHR'/>" +
                 "<h6> March 12th (Tuesday) </h6> " +
+                "<h6> Added a feedback page to help resolve issues. </h6>" +
                 "<h6> The button to shift everyone up one grade has been fully implemented. </h6>" +
                 "<h6> Added a Staff Directory page that shows ONLY mentors. </h6> " +
                 "<h6> Fixed an issue where the bar for Yogurt was not showing up in the Breakfast page. </h6> <hr class='changeLogHR'/>" +
@@ -133,7 +132,7 @@ $(document).ready(function(){
                 "<h6> Some loading optimizations. Things should now be a little smoother. </h6>";
             
             $("#h_navigationContainer").append(
-                "<h5 id='h_welcome'>" + welcomeText + "</h5>" +
+                "<h5 id='h_welcome' class='title'>" + welcomeText + "</h5>" +
 
                 "<ul id='whatsNewContainer' class='collapsible'>" +
                     "<li>" +
@@ -269,7 +268,7 @@ $(document).ready(function(){
     }
 
     /* Navigate back to Login Screen */
-    $(".logout").on("click", function(){
+    $("#nb_return").on("click", function(){
         firebase.auth().signOut().then(function() {
             firebase.auth().onAuthStateChanged(function(user){
                 if (!user) {

@@ -3,6 +3,8 @@ $(document).ready(function(){
     const staffReference = firebase.database().ref('/Staff');
     const studentReference = firebase.database().ref('/Students');
 
+    $("#nb_return").text("HOME");
+
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
         if (user) {
@@ -33,7 +35,7 @@ $(document).ready(function(){
                 Show ONLY that mentor's grade.
             */
             $("#d_container").append(
-                "<h5 id='md_title'> </h5>" +
+                "<h5 id='md_title' class='center title'> </h5>" +
                 "<ul id='md_studentView' class='collapsible'>" +
                 "</ul>"
             );
@@ -259,7 +261,7 @@ $(document).ready(function(){
     }
 
     /* Navigate back to Home Screen */
-    $(".homeScreen").on("click", function(){
+    $("#nb_return").on("click", function(){
         window.location.href = "/home";
     });
 

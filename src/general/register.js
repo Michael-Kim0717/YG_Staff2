@@ -2,6 +2,8 @@ $(document).ready(function(){
 
     const staffReference = firebase.database().ref('/Staff');
 
+    $("#nb_return").text("LOGIN");
+
     firebase.auth().onAuthStateChanged(function (user){
         if (user) {
             moveAccordingly("loggedIn");            
@@ -96,7 +98,7 @@ $(document).ready(function(){
     });
 
     /* Navigate back to Login Screen */
-    $(".loginScreen").on("click", function(){
+    $("#nb_return").on("click", function(){
         window.location.href = "/";
     });
 

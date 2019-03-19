@@ -37,12 +37,17 @@
 
 /* Home */
     #h_welcome {
+        margin-bottom: 7vh;
         text-align: center;
     }
 
     #whatsNewContainer {
-        margin: 3vh auto;
+        margin: 0 auto;
         width: 95%;
+    }
+
+    #whatsNewContainer .collapsible-header {
+        background-color: #efe7de;
     }
 
     #whatsNewContainer h6 {
@@ -54,6 +59,7 @@
     }
 
     .navigation {
+        background-color: #efe7de;
         border: 1px solid black;
         border-radius: 5px;
         box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.75);
@@ -66,7 +72,7 @@
     }
 
     .navigationText {
-        font-size: 2.25rem;
+        font-size: 2rem;
         margin: 0 auto;
     }
 

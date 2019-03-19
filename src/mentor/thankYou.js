@@ -2,6 +2,8 @@ $(document).ready(function(){
 
     const staffReference = firebase.database().ref('/Staff');
 
+    $("#nb_return").text("HOME");
+
     /* Get Current Logged in User */
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
@@ -15,26 +17,29 @@ $(document).ready(function(){
                             name: childSnapshot.val().name,
                             role: childSnapshot.val().role
                         };
-                        moveAccordingly(loggedInUser.role);
                     }
                 }); 
+                
+                /* Return the user back to the 'Home Page' */
+                $("#nb_return").on("click", function(){
+                    window.location.href = "/home";
+                });
+
+                $("#mty_backHome").on("click", function(){
+                    window.location.href = "/home";
+                });
             });
         }
         else {
-            moveAccordingly("none");
-        }
-    });
+            /* Return the user back to the 'Home Page' */
+            $("#nb_return").on("click", function(){
+                window.location.href = "/";
+            });
 
-    /* Check if user is logged in and move them accordingly. */
-    function moveAccordingly (role) {
-        if (role !== "mentor") {
-            window.location.href = "/noPermission";
+            $("#mty_backHome").on("click", function(){
+                window.location.href = "/";
+            });
         }
-    }
-
-    /* Return the user back to the 'Home Page' */
-    $("#mty_backHome").on("click", function(){
-        window.location.href = "/home";
     });
 
 });

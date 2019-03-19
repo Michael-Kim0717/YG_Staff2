@@ -2,6 +2,8 @@ $(document).ready(function(){
 
     const staffReference = firebase.database().ref('/Staff');
 
+    $("#nb_return").text("HOME");
+
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
         if (user) {
@@ -35,6 +37,11 @@ $(document).ready(function(){
 
     function appendPage() {
         $("#asd_container").append(
+            "<h6> Staff Members will eventually be able to be added/edited/deleted on this page. </h6>" +
+            "<h6> Adding a Staff Member will allow them to make an account. </h6>" +
+            "<h6> Removing a Staff Member will make it so that they can still log in, but not be able to access anything. </h6>" +
+            "<h6> Depending on their role ('Admin' or 'Mentor'), these staff members will have access to their respective permissions. </h6> <br/>" +
+            "<h6> * This page only shows a list of MENTORS at the moment. </h6> <br/> " +
             "<ul id='asd_staffView' class='collapsible'>" +
             "</ul>"
         );
@@ -65,7 +72,7 @@ $(document).ready(function(){
     }
 
     /* Navigate back to Home Screen */
-    $(".homeScreen").on("click", function(){
+    $("#nb_return").on("click", function(){
         window.location.href = "/home";
     });
     

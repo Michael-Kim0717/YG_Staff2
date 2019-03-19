@@ -7,6 +7,8 @@ $(document).ready(function(){
     const breakfastReference = firebase.database().ref('/Breakfast/' + weekRange);
     const allBreakfastReference = firebase.database().ref('/Breakfast');
 
+    $("#nb_return").text("HOME");
+
     let loggedInUser = {};
     firebase.auth().onAuthStateChanged(function (user){
         if (user) {
@@ -39,7 +41,7 @@ $(document).ready(function(){
                 Check if the user is trying to open the breakfast form when it has been filled out.
             */
             $("#b_container").append(
-                "<h5 id='mb_f_title'> </h5>" +
+                "<h5 id='mb_f_title' class='title center'> </h5>" +
                 "<p> <label>" +
                     "<input id='mb_f_coffee' type='checkbox' />" +
                     "<span> Coffee </span>" +
@@ -121,12 +123,12 @@ $(document).ready(function(){
             */
 
             $("#b_container").append(
-                "<h5 id='ad_currentWeekRange'> </h5>" +
+                "<h5 id='ad_currentWeekRange' class='center title'> </h5>" +
                 "<canvas id='ab_chart' aspectRatio='1'>" +
             
                 "</canvas>" +
                 "<div id='ad_otherList'>" +
-                    "<h5> Other Suggestions: </h5>" +
+                    "<h5 class='center'> Other Suggestions: </h5>" +
                 "</div>"
             );
             
@@ -316,7 +318,7 @@ $(document).ready(function(){
     }
 
     /* Navigate back to Home Screen */
-    $(".homeScreen").on("click", function(){
+    $("#nb_return").on("click", function(){
         window.location.href = "/home";
     });
 
