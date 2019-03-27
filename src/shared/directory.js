@@ -180,7 +180,6 @@ $(document).ready(function(){
                                     "</div>" +
                                     
                                     "<button class='btn' id='" + student_childSnapshot.key + "Edit'> Edit </button>" +
-                                    "<button class='btn right' id='" + student_childSnapshot.key + "Delete'> Delete </button>" +
                                 "</span>"
                             );
                             M.updateTextFields();

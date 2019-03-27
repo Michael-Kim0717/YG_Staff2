@@ -26,3 +26,40 @@
     #asd_staffView .collapsible-header {
         background-color: #efe7de;
     }
+
+    #asd_adminView .collapsible-header {
+        background-color: #efe7de;
+    }
+
+    #asd_addStaff {
+        display: block;
+        margin: 0 auto;
+    }
+
+    #addStudentModal .row label {
+        font-size: 1rem;
+    }
+
+    #asm_f_addStaff {
+        margin-bottom: 5vh;
+    }
+
+    #asd_tip {
+        position: fixed;
+        bottom: 5vh;
+        right: 10vw;
+    }
+
+    .tap-target-content h5 {
+        margin-bottom: 3vh;
+    }
+
+    .tap-target-content h6 {
+        font-size: 1rem;
+        margin: 2vh 2vw;
+    }
+
+    .tap-target {
+        background-color: #e8e0d6;
+        opacity: 0.8;
+    }

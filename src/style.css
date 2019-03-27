@@ -54,6 +54,11 @@
         margin: 3vh 5vw;
     }
 
+    .success-noSideMargin {
+        color: #3CB371;
+        margin: 3vh;
+    }
+
     .btn {
         background-color: #323132;
     }

@@ -1,4 +1,6 @@
 module.exports = app => {
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(process.env.sendGridApiKey);
 
     /* PreLogin Pages */
     app.get('/', (request, response) => {
@@ -54,9 +56,7 @@ module.exports = app => {
             sendEmailTo.push(request.body[i]);
         }
         console.log(sendEmailTo);
-        
-        const sgMail = require('@sendgrid/mail');
-        sgMail.setApiKey(process.env.sendGridApiKey);
+
         const msg = {
             to: sendEmailTo,
             from: 'bygstaff@bygstaff.herokuapp.com',
@@ -89,14 +89,63 @@ module.exports = app => {
             logText += "Missing Students: \n" + missingStudents + "\n";
         }
 
-        const sgMail = require('@sendgrid/mail');
-        sgMail.setApiKey(process.env.sendGridApiKey);
         const msg = {
             to: 'michaelkim0717@gmail.com',
             from: 'bygstaff@bygstaff.herokuapp.com',
             subject: 'Logs from this week',
             text: logText,
             html: '<p>' + logText + '</p>',
+        };
+        sgMail.send(msg);
+    });
+
+    app.post('/staffAdd', (request, response) => {
+        const msg = {
+            to: 'michaelkimbot@gmail.com',
+            from: 'bygstaff@bygstaff.herokuapp.com',
+            subject: 'Staff Add: ' + request.body.name,
+            text: 'Adding: \nName: ' + request.body.name + "\n" +
+                'Grade: ' + request.body.grade + "\n" +
+                'Role: ' + request.body.role + "\n" +
+                'Email: ' + request.body.email + "\n",
+            html: '<p> Adding: <br/>Name: ' + request.body.name + "<br/>" +
+                'Grade: ' + request.body.grade + "<br/>" +
+                'Role: ' + request.body.role + "<br/>" +
+                'Email: ' + request.body.email + "<br/>" + '</p>',
+        };
+        sgMail.send(msg);
+    });
+
+    app.post('/staffEdit', (request, response) => {
+        const msg = {
+            to: 'michaelkimbot@gmail.com',
+            from: 'bygstaff@bygstaff.herokuapp.com',
+            subject: 'Staff Edit: ' + request.body.name,
+            text: 'Editing: \nName: ' + request.body.name + "\n" +
+                'Grade: ' + request.body.grade + "\n" +
+                'Role: ' + request.body.role + "\n" +
+                'Email: ' + request.body.email + "\n",
+            html: '<p> Editing: <br/>Name: ' + request.body.name + "<br/>" +
+                'Grade: ' + request.body.grade + "<br/>" +
+                'Role: ' + request.body.role + "<br/>" +
+                'Email: ' + request.body.email + "<br/>" + '</p>',
+        };
+        sgMail.send(msg);
+    });
+
+    app.post('/staffDelete', (request, response) => {
+        const msg = {
+            to: 'michaelkimbot@gmail.com',
+            from: 'bygstaff@bygstaff.herokuapp.com',
+            subject: 'Staff Delete: ' + request.body.name,
+            text: 'Deleting: \nName: ' + request.body.name + "\n" +
+                'Grade: ' + request.body.grade + "\n" +
+                'Role: ' + request.body.role + "\n" +
+                'Email: ' + request.body.email + "\n",
+            html: '<p> Deleting: <br/>Name: ' + request.body.name + "<br/>" +
+                'Grade: ' + request.body.grade + "<br/>" +
+                'Role: ' + request.body.role + "<br/>" +
+                'Email: ' + request.body.email + "<br/>" + '</p>',
         };
         sgMail.send(msg);
     });
