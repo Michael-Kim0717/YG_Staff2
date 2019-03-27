@@ -91,6 +91,8 @@ $(document).ready(function(){
             
             "<ul id='ad_studentView' class='collapsible'>" +
             "</ul>" +
+            
+            "<button data-target='ad_confirmationModal' id='ad_graduate' class='btn modal-trigger'> Move Everyone One Grade Up </button>" +
 
             "<div id='ad_confirmationModal' class='modal'>" +
                 "<div class='modal-content'>" +

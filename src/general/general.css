@@ -43,7 +43,7 @@
 
     #whatsNewContainer {
         margin: 0 auto;
-        width: 95%;
+        width: 80%;
     }
 
     #whatsNewContainer .collapsible-header {
@@ -63,8 +63,8 @@
         border: 1px solid black;
         border-radius: 5px;
         box-shadow: 0px 0px 10px -3px rgba(0,0,0,0.75);
-        height: 18vh;
-        margin: 10vh 3vw;
+        height: 12vh;
+        margin: 5vh 7vw;
     }
 
     .navigation:hover {
