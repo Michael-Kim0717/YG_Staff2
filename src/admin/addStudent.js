@@ -48,7 +48,9 @@ $(document).ready(function(){
                                 address: $("#ad_f_address").val() + ", " + $("#ad_f_city").val() + ", " + $("#ad_f_state").val(),
                                 birthday: $("#ad_f_birthday").val(),
                                 email: $("#ad_f_email").val(),
-                                phone: $("#ad_f_phoneNumber").val()
+                                phone_number: $("#ad_f_phoneNumber").val(),
+                                parents_number: $("#ad_f_parentsPhoneNumber").val(),
+                                classes_taken: $("#ad_f_classesTaken").val()
                             }
                             $("#ad_f_name").val("");
                             $("#ad_f_grade").val("");
@@ -58,6 +60,8 @@ $(document).ready(function(){
                             $("#ad_f_birthday").val("");
                             $("#ad_f_email").val("");
                             $("#ad_f_phoneNumber").val("");
+                            $("#ad_f_parentsPhoneNumber").val("");
+                            $("#ad_f_classesTaken").val("");
                             studentReference.push().set(studentObject);
                             $("#ad_f_submissionError").append(
                                 "<h6 class='success'> Student Added Successfully! </h6>"
@@ -86,6 +90,7 @@ $(document).ready(function(){
                 studentReference.once('value', function(snapshot){
                     snapshot.forEach(function(childSnapshot){
                         studentCities[retrieveCity(childSnapshot.val().address)] = null;
+                        console.log(childSnapshot.val().address);
                     });
                     $('input.ad_f_city').autocomplete({data: studentCities});
                 });
@@ -96,8 +101,8 @@ $(document).ready(function(){
         }
     });
 
-    function appendPage () {
-        $("#ad_container").append(
+    function appendPage() {
+        $("#aas_container").append(
             "<h6 id='ad_error_section' class='error'> * Required </h6>" +
             "<h6 class='ad_f_title'> Add a Student </h6>" +
             "<div class='input-field col s12'>" +
@@ -131,6 +136,14 @@ $(document).ready(function(){
             "<div class='input-field col s12'>" +
                 "<input id='ad_f_phoneNumber' type='text' class='validate'>" +
                 "<label for='ad_f_phoneNumber'> Phone Number </label>" +
+            "</div>" +
+            "<div class='input-field col s12'>" +
+                "<input id='ad_f_parentsPhoneNumber' type='text' class='validate'>" +
+                "<label for='ad_f_parentsPhoneNumber'> Parent's Phone Number </label>" +
+            "</div>" +
+            "<div class='input-field col s12'>" +
+                "<input id='ad_f_classesTaken' type='text' class='validate'>" +
+                "<label for='ad_f_classesTaken'> Classes Taken </label>" +
             "</div>" +
             "<div id='ad_f_submissionError' class='submissionError'>" +
     

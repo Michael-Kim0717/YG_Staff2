@@ -39,14 +39,9 @@ $(document).ready(function(){
                 Check to see if the mentor has already completed log and/or breakfast.
             */
             let logNavText = "Log";
-            let breakfastNavText = "Breakfast";
-            const whatsNewText = 
-                "<h6> March 12th (Tuesday) </h6> " +
-                "<h6> - Added a feedback page to help resolve issues. </h6>" +
-                "<h6> - Fixed an issue with submitting breakfast. </h6>" +
-                "<h6> - Fixed an issue where 'Completed' wasn't showing up after completing a form. </h6> <hr class='changeLogHR'/>" +
-                "<h6> March 11th (Monday) </h6> " +
-                "<h6> - Some loading optimizations. Things should now be a little smoother. </h6>"
+            /* Removed 10/29/2019 */
+            // let breakfastNavText = "Breakfast";
+            const whatsNewText = "";
 
             adminLogReference.once('value', function(logSnapshot){
                 logSnapshot.forEach(function(childSnapshot) {
@@ -58,7 +53,8 @@ $(document).ready(function(){
                     }
                 })
             });                    
-            firebase.database().ref('/Breakfast/' + weekRange + '/completed').once('value', function(breakfastSnapshot){
+            /* Removed 10/29/2019 */
+            /* firebase.database().ref('/Breakfast/' + weekRange + '/completed').once('value', function(breakfastSnapshot){
                 breakfastSnapshot.forEach(function(childSnapshot) {
                     if (childSnapshot.val() === loggedInUser.name.substring(0, 4) + loggedInUser.grade) {
                         $("#breakfastNavText").empty();
@@ -67,7 +63,7 @@ $(document).ready(function(){
                         );
                     }
                 })
-            });
+            }); */
 
             $("#h_navigationContainer").append(
                 "<h5 id='h_welcome' class='title'>" + welcomeText + "</h5>" +
@@ -84,9 +80,10 @@ $(document).ready(function(){
                 "<div id='logNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='logNavText' class='navigationText'>" + logNavText + "</h3>" +
                 "</div>" +
-                "<div id='breakfastNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                /* Removed 10/29/2019 */
+                /* "<div id='breakfastNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='breakfastNavText' class='navigationText'>" + breakfastNavText + "</h3>" +
-                "</div>" +
+                "</div>" +  */
                 "<div id='directoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 class='navigationText'> Directory </h3>" +
                 "</div>"
@@ -99,12 +96,13 @@ $(document).ready(function(){
                 if ($("#logNavText").text().trim() !== 'Completed') {
                     window.location.href = "/log"; 
                 }
-            });  
-            $("#breakfastNav").on("click", function(){
+            });
+            /* Removed 10/29/2019 */  
+            /* $("#breakfastNav").on("click", function(){
                 if ($("#breakfastNavText").text().trim() !== 'Completed') {
                     window.location.href = "/breakfast"; 
                 }
-            });
+            }); */
             $("#directoryNav").on("click", function(){
                 window.location.href = "/directory"; 
             });
@@ -114,26 +112,7 @@ $(document).ready(function(){
                 Change Welcome Text accordingly.
                 Add Admin specific pages to the home page.
             */
-            const whatsNewText =
-                "<h6> March 19th (Tuesday) </h6> " +
-                "<h6> - Added a quick tooltip for the Staff Directory page. </h6>" +
-                "<h6> - Added the functionality to add, edit, and delete staff members on the Staff Directory page. </h6>" +
-                "<h6> - Added the ability to view admins on the Staff Directory page. </h6> <hr class='changeLogHR'/> " +
-                "<h6> March 18th (Monday) </h6> " +
-                "<h6> - Added the ability to send an email to people who have NOT submitted logs yet. The issue is the email may be sent to their junk/spam folder until we receive a domain. </h6> <hr class='changeLogHR'/>" +
-                "<h6> March 14th (Thursday) </h6> " +
-                "<h6> - Previous week's breakfast will now be automatically deleted once Monday rolls around. </h6>" +
-                "<h6> - Removed access to previous logs. Previous logs will now be automatically deleted once the following Sunday rolls around. </h6>" +
-                "<h6> - Changed Breakfast Chart to Horizontal from Vertical for readability. </h6>" +
-                "<h6> - Fixed an issue where Add Student was not showing up. </h6> <hr class='changeLogHR'/>" +
-                "<h6> March 12th (Tuesday) </h6> " +
-                "<h6> - Added a feedback page to help resolve issues. </h6>" +
-                "<h6> - The button to shift everyone up one grade has been fully implemented. </h6>" +
-                "<h6> - Added a Staff Directory page that shows ONLY mentors. </h6> " +
-                "<h6> - Fixed an issue where the bar for Yogurt was not showing up in the Breakfast page. </h6> <hr class='changeLogHR'/>" +
-                "<h6> March 11th (Monday) </h6> " +
-                "<h6> - Fixed an issue with log dates. Starting next Sunday, it should show all logs properly in one week range. </h6>" +
-                "<h6> - Some loading optimizations. Things should now be a little smoother. </h6>";
+            const whatsNewText = "";
             
             $("#h_navigationContainer").append(
                 "<h5 id='h_welcome' class='title'>" + welcomeText + "</h5>" +
@@ -150,9 +129,10 @@ $(document).ready(function(){
                 "<div id='logNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='logNavText' class='navigationText'> Log </h3>" +
                 "</div>" +
-                "<div id='breakfastNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                /* Removed 10/29/2019 */
+                /* "<div id='breakfastNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='breakfastNavText' class='navigationText'> Breakfast </h3>" +
-                "</div>" +
+                "</div>" + */
                 "<div id='directoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 class='navigationText'> Student Directory </h3>" +
                 "</div>" +
@@ -170,9 +150,10 @@ $(document).ready(function(){
             $("#logNav").on("click", function(){
                 window.location.href = "/log"; 
             });  
-            $("#breakfastNav").on("click", function(){
+            /* Removed 10/29/2019 */
+            /* $("#breakfastNav").on("click", function(){
                 window.location.href = "/breakfast"; 
-            });
+            }); */
             $("#directoryNav").on("click", function(){
                 window.location.href = "/directory"; 
             });

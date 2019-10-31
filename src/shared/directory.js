@@ -129,7 +129,7 @@ $(document).ready(function(){
                                         "<h6> <b> Email Address: </b> </h6>" +
                                         "<h6>" + student_childSnapshot.val().email + "</h6> <br/>" + 
                                         "<h6> <b> Phone Number: </b> </h6>" +
-                                        "<h6>" + student_childSnapshot.val().phone + "</h6> <br/>" + 
+                                        "<h6>" + student_childSnapshot.val().phone_number + "</h6> <br/>" + 
                                         "<h6> <b> Birthday: </b> </h6>" +
                                         "<h6>" + student_childSnapshot.val().birthday + "</h6> <br/>" + 
                                         "<h6> <b> Address: </b> </h6>" +
