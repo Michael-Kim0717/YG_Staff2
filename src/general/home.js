@@ -23,7 +23,7 @@ $(document).ready(function(){
                     }
                 });
                 
-                appendPage(loggedInUser.role);
+                appendPage(loggedInUser.role, loggedInUser.grade);
             });
         }
         else {
@@ -31,7 +31,7 @@ $(document).ready(function(){
         }
     });
 
-    function appendPage (role) {
+    function appendPage (role, grade) {
         const welcomeText = "Welcome " + retrieveFirstName(loggedInUser.name);
         if (role === 'mentor') {
             /* Mentor Home Page:
@@ -126,6 +126,9 @@ $(document).ready(function(){
                     "</li>" +
                 "</ul>" +
 
+                "<div id='logSubmitNav' class=''>" +
+                    
+                "</div>" +
                 "<div id='logNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='logNavText' class='navigationText'> Log </h3>" +
                 "</div>" +
@@ -144,9 +147,31 @@ $(document).ready(function(){
                 "</div>"
             );
 
+            if (grade !== undefined) {
+                $("#logSubmitNav").addClass("s10 offset-s1 navigation valign-wrapper");
+                $("#logSubmitNav").append("<h3 id='submitLogNavText' class='navigationText'> Submit Log </h3>");
+
+                adminLogReference.once('value', function(logSnapshot){
+                    logSnapshot.forEach(function(childSnapshot) {
+                        if (childSnapshot.key === grade) {
+                            console.log(childSnapshot.key);
+                            $("#submitLogNavText").empty();
+                            $("#submitLogNavText").append(
+                                "Completed"
+                            );
+                        }
+                    })
+                }); 
+            }
+
             $(".collapsible").collapsible();
 
             /* Navigate according to login status */
+            $("#logSubmitNav").on("click", function(){
+                if ($("#submitLogNavText").text().trim() !== 'Completed') {
+                    window.location.href = "/adminLog"; 
+                }
+            });
             $("#logNav").on("click", function(){
                 window.location.href = "/log"; 
             });  

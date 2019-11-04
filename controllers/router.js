@@ -50,6 +50,10 @@ module.exports = app => {
         response.render('adminPages/staffDirectory');
     });
 
+    app.get('/adminLog', (request, response) => {
+        response.render('adminPages/log');
+    });
+
     app.post('/sendMassEmail', (request, response) => {
         let sendEmailTo = [];
         for (let i = 0; i < Object.keys(request.body).length; i++) {

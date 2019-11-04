@@ -91,6 +91,7 @@ $(document).ready(function(){
             "</ul>" +
 
             "<ul id='asm_f_grade_dropdown' class='dropdown-content'>" + 
+                "<li class='valign-wrapper asm_gd'> NONE </li>" + 
                 "<li class='valign-wrapper asm_gd'> 6B </li>" + "<li class='valign-wrapper asm_gd'> 6G </li>" + 
                 "<li class='valign-wrapper asm_gd'> 7B </li>" + "<li class='valign-wrapper asm_gd'> 7G </li>" + 
                 "<li class='valign-wrapper asm_gd'> 8B </li>" + "<li class='valign-wrapper asm_gd'> 8G </li>" + 
@@ -131,6 +132,8 @@ $(document).ready(function(){
                                 "<span>" +
                                     "<h6> <b> Email: </b> </h6>" +
                                     "<h6>" + childSnapshot.val().email + "</h6>" +
+                                    "<h6> <b> Grade: </b> </h6>" +
+                                    "<h6>" + childSnapshot.val().grade + "</h6>" +
                                     "<h6> <b> Role: </b> </h6>" +
                                     "<h6>" + childSnapshot.val().role + "</h6> <br />" +
                                     "<button class='btn' id='" + childSnapshot.key + "Edit'> Edit </button>" +
@@ -181,6 +184,10 @@ $(document).ready(function(){
                                         "<label for='asd_f_email'> Email Address </label>" +
                                     "</div>" +
                                     "<div class='input-field col s12'>" +
+                                        "<input id='asd_f_grade' value='" + childSnapshot.val().grade + "' type='text' class='validate'>" +
+                                        "<label for='asd_f_grade'> Grade </label>" +
+                                    "</div>" +
+                                    "<div class='input-field col s12'>" +
                                         "<input disabled id='asd_f_role' value='" + childSnapshot.val().role + "' type='email' class='validate'>" +
                                         "<label for='asd_f_role'> Role </label>" +
                                     "</div>" +
@@ -196,10 +203,8 @@ $(document).ready(function(){
                             const staffObject = {
                                 name: $("#asd_f_name").val(),
                                 email: $("#asd_f_email").val(),
-                                role: $("#asd_f_role").val()
-                            }
-                            if (childSnapshot.val().role === 'mentor') {
-                                staffObject["grade"] = $("#asd_f_grade").val();
+                                role: $("#asd_f_role").val(),
+                                grade: $("#asd_f_grade").val()
                             }
                             staffReference.child(childSnapshot.key).set(staffObject);
                             $.ajax("/staffEdit", {
@@ -246,12 +251,6 @@ $(document).ready(function(){
 
         $('.asm_rd').on("click", function() {
             $('#asm_f_role').text($(this)[0].innerHTML.trim());
-            if ($(this)[0].innerHTML.trim() === 'admin') {
-                $("#asm_f_gradeField").css("display", "none");
-            }
-            else if ($(this)[0].innerHTML.trim() === 'mentor') {
-                $("#asm_f_gradeField").css("display", "inherit");
-            }
         });
 
         $('.asm_gd').on("click", function() {
