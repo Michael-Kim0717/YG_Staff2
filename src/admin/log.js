@@ -154,18 +154,31 @@ $(document).ready(function(){
                                 );
                             }
                             else {
-                                var selected = [];
+                                var selected = [],
+                                    attendance = [];
                                 $('.student input:checked').each(function() {
                                     const id = $(this).attr('id');
                                     selected.push($(this).attr('name') + ": " + $("#" + id + "Absence").val());
                                 });
+                                
+                                $('.checkbox').each(function(){
+                                    let name = $(this).attr('name');
+                                    if ($(this).is(':checked')){
+                                        attendance.push(name + " ABSENT");
+                                    }
+                                    else {
+                                        attendance.push(name + " PRESENT");
+                                    }
+                                });
+
                                 const logDetails = {
                                     missingStudents: selected,
                                     reflection: $("#ml_f_sgReflection").val(),
                                     relational: $("#ml_f_relational").val(),
                                     prayerRequest: $("#ml_f_prayerRequest").val(),
                                     theme: $("#ml_f_theme").val(),
-                                    questionsPMike: $("#ml_f_questionsPMike").val()
+                                    questionsPMike: $("#ml_f_questionsPMike").val(),
+                                    attendance: attendance
                                 }
                                 mentorLogReference.set(logDetails);
                                 window.location.href = "/thankYou";

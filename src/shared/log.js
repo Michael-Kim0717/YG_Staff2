@@ -160,18 +160,31 @@ $(document).ready(function(){
                                 );
                             }
                             else {
-                                var selected = [];
+                                var selected = [],
+                                    attendance = [];
                                 $('.student input:checked').each(function() {
                                     const id = $(this).attr('id');
                                     selected.push($(this).attr('name') + ": " + $("#" + id + "Absence").val());
                                 });
+
+                                $('.checkbox').each(function(){
+                                    let name = $(this).attr('name');
+                                    if ($(this).is(':checked')){
+                                        attendance.push(name + " ABSENT");
+                                    }
+                                    else {
+                                        attendance.push(name + " PRESENT");
+                                    }
+                                });
+                                
                                 const logDetails = {
                                     missingStudents: selected,
                                     reflection: $("#ml_f_sgReflection").val(),
                                     relational: $("#ml_f_relational").val(),
                                     prayerRequest: $("#ml_f_prayerRequest").val(),
                                     theme: $("#ml_f_theme").val(),
-                                    questionsPMike: $("#ml_f_questionsPMike").val()
+                                    questionsPMike: $("#ml_f_questionsPMike").val(),
+                                    attendance: attendance
                                 }
                                 mentorLogReference.set(logDetails);
                                 window.location.href = "/thankYou";
@@ -239,7 +252,10 @@ $(document).ready(function(){
                                     "<h6> <b> Relational Log: </b> <br/>" + log_childSnapshot.val().relational + "</h6> <br/>" +
                                     "<h6> <b> Prayer Request: </b> <br/>" + log_childSnapshot.val().prayerRequest + "</h6> <br/>" +
                                     "<h6> <b> Current Theme: </b> <br/>" + log_childSnapshot.val().theme + "</h6> <br/>" +
-                                    "<h6> <b> Questions for Pastor Mike: </b> <br/>" + log_childSnapshot.val().questionsPMike + "</h6> <br/>" +
+                                    "<h6> <b> Questions: </b> <br/>" + log_childSnapshot.val().questionsPMike + "</h6> <br/>" +
+                                    "<div class='" + log_childSnapshot.key + weekRange + "Attendance'>" +
+                                        "<h6> <b> Attendance: </b> </h6>" +
+                                    "</div> <br/>" +
                                 "</span>" + 
                             "</div>" +
                         "</li>"
@@ -259,6 +275,23 @@ $(document).ready(function(){
                             bodyString = bodyString + log_childSnapshot.val().missingStudents[i] + "%0D%0A";
                         }
                     }
+                    if (undefined !== log_childSnapshot.val().attendance) {
+                        bodyString = bodyString + "Attendance: %0D%0A";
+                        for (let i = 0; i < log_childSnapshot.val().attendance.length; i++) {
+                            let currentStudent = log_childSnapshot.val().attendance[i];
+                            if (currentStudent.substring(currentStudent.length - 6) === "ABSENT") {
+                                $("." + log_childSnapshot.key + weekRange + "Attendance").append(
+                                    "<h6 style='color:red'>" + currentStudent.substring(0, currentStudent.length - 6) + "</h6>"
+                                )
+                            }
+                            else {
+                                $("." + log_childSnapshot.key + weekRange + "Attendance").append(
+                                    "<h6 style='color:green'>" + currentStudent.substring(0, currentStudent.length - 7) + "</h6>"
+                                ) 
+                            }
+                            bodyString = bodyString + log_childSnapshot.val().attendance[i] + "%0D%0A";
+                        }
+                    }
                     bodyString = bodyString + "%0D%0A";
                     missingLogs = removeElementFromArray(missingLogs, log_childSnapshot.key);
                 })
@@ -267,7 +300,10 @@ $(document).ready(function(){
                 $("#al_sendLogs").on("click", function() {
                     console.log(missingLogs);
                     let mailtoString = "mailto:test@test.com";
-                    if (missingLogs.length === 0){
+                    
+                    mailtoString = mailtoString + "?subject=Logs for " + getStartOfWeek(weekRange) + "&body=" + bodyString;
+                    window.open(mailtoString);
+                    /* if (missingLogs.length === 0){
                         mailtoString = mailtoString + "?subject=Logs for " + getStartOfWeek(weekRange) + "&body=" + bodyString;
                         window.open(mailtoString);
                     }
@@ -277,7 +313,7 @@ $(document).ready(function(){
                             "<h6 class='error-noSideMargin'> Logs are currently missing </h6>"
                         );
                         console.log(allLogs);
-                    }
+                    } */
                 });
 
                 /* Adds onto the missing log string depending on the current missing grades. */
