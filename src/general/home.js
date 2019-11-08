@@ -86,6 +86,9 @@ $(document).ready(function(){
                 "</div>" +  */
                 "<div id='directoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 class='navigationText'> Directory </h3>" +
+                "</div>" + 
+                "<div id='attendanceNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                    "<h3 class='navigationText'> Attendance </h3>" +
                 "</div>"
             );
 
@@ -105,6 +108,9 @@ $(document).ready(function(){
             }); */
             $("#directoryNav").on("click", function(){
                 window.location.href = "/directory"; 
+            });
+            $("#attendanceNav").on("click", function(){
+                window.location.href = "/attendance";
             });
         }
         else if (role === 'admin') {
@@ -144,6 +150,9 @@ $(document).ready(function(){
                 "</div>" +
                 "<div id='staffDirectoryNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 class='navigationText'> Staff Directory </h3>" +
+                "</div>" +
+                "<div id='attendanceNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                    "<h3 class='navigationText'> Attendance </h3>" +
                 "</div>"
             );
 
@@ -187,6 +196,9 @@ $(document).ready(function(){
             });
             $("#staffDirectoryNav").on("click", function(){
                 window.location.href = "/staffDirectory";
+            });
+            $("#attendanceNav").on("click", function(){
+                window.location.href = "/attendance";
             });
         }
     }

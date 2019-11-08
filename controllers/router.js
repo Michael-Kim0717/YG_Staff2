@@ -32,6 +32,10 @@ module.exports = app => {
         response.render('generalPages/directory');
     });
 
+    app.get('/attendance', (request, response) => {
+        response.render('generalPages/attendance');
+    });
+
     /* Mentor Pages */
     app.get('/thankYou', (request, response) => {
         response.render('mentorPages/thankYou');

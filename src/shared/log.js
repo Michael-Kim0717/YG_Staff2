@@ -7,6 +7,7 @@ $(document).ready(function(){
     const studentReference = firebase.database().ref('/Students');
     const adminLogReference = firebase.database().ref('/Log/' + weekRange);
     const allLogsReference = firebase.database().ref('/Log');
+    const attendanceReference = firebase.database().ref('/Attendance');
 
     $("#nb_return").text("HOME");
 
@@ -91,8 +92,8 @@ $(document).ready(function(){
                     studentReference.once('value', function(student_snapshot){
                         student_snapshot.forEach(function(student_snapshot){
                             if (loggedInUser.grade === (student_snapshot.val().grade)) {
-                                const id = "ml_f_" + student_snapshot.key,
-                                    absenceReason = "ml_f_" + student_snapshot.key + "Absence";
+                                const id = student_snapshot.val().name + "_" + student_snapshot.key,
+                                    absenceReason =student_snapshot.val().name + "_" + student_snapshot.key + "Absence";
                                 $("#ml_f_student").append(
                                     "<div class='student'>" +
                                         "<div class='col s5'>" +
@@ -162,20 +163,25 @@ $(document).ready(function(){
                             else {
                                 var selected = [],
                                     attendance = [];
+                                const id = $(this).attr('id');
                                 $('.student input:checked').each(function() {
-                                    const id = $(this).attr('id');
                                     selected.push($(this).attr('name') + ": " + $("#" + id + "Absence").val());
                                 });
 
+                                const startOfWeek = getStartOfWeek(weekRange).substring(6) + "_" + getStartOfWeek(weekRange).substring(0, 2) + "_" + getStartOfWeek(weekRange).substring(3, 5);
                                 $('.checkbox').each(function(){
                                     let name = $(this).attr('name');
+                                    let id = $(this).attr('id');
                                     if ($(this).is(':checked')){
                                         attendance.push(name + " ABSENT");
+                                        attendanceReference.child(id).child(startOfWeek).set("A");
                                     }
                                     else {
                                         attendance.push(name + " PRESENT");
+                                        attendanceReference.child(id).child(startOfWeek).set("P");
                                     }
                                 });
+                                attendanceReference.child("test").child(startOfWeek).set("P");
                                 
                                 const logDetails = {
                                     missingStudents: selected,
@@ -187,7 +193,9 @@ $(document).ready(function(){
                                     attendance: attendance
                                 }
                                 mentorLogReference.set(logDetails);
-                                window.location.href = "/thankYou";
+                                setTimeout(function(){
+                                    window.location.href = "/thankYou";
+                                }, 2500);
                             }
                         }
                     }

@@ -1,3 +1,29 @@
+/* Attendance */
+    /* Admin */
+    #att_attendanceTable {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    td, th {
+        vertical-align: top;
+        border-top: 1px solid #ccc;
+        padding: 20px 0 40px 0;
+    }
+    th {
+        position: absolute;
+        left: 0; 
+        width: 150px;
+    }
+    .outer {
+        position: relative;
+    }
+    .inner {
+        overflow-x: scroll;
+        overflow-y: visible;
+        margin-left: 150px;
+    }
+
 /* Log */
     /* Admin */
     #al_logView .collapsible-header {
