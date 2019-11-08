@@ -33,20 +33,53 @@ $(document).ready(function(){
         if (role === 'mentor') {
             $("#att_container").append(
                 "<h5 id='ma_title' class='center title'> </h5>" +
-                "<ul id='ma_studentView' class='collapsible'>" +
-                "</ul>"
+             
+                "<div class='outer'>" +
+                    "<div class='inner'>" +
+                        "<table id='att_attendanceTable'>" + 
+                            "<tr id='att_attendanceTableDates'>" +
+                                "<th class='center'> DATE: </th>" +
+                            "</tr>" + 
+                        "</table>" +
+                    "</div>" +
+                "</div>"
             );
-            
-            /* Activate all collapsible list views */
-            $('.collapsible').collapsible();
 
             /* Retrieve list of students from the database and show ONLY that mentor's grade. */
-            $("#ma_title").append(loggedInUser.grade + " Directory");
+            $("#ma_title").append(loggedInUser.grade + " Attendance");
+
+            /* Using 'test' attendance information, we will gather a list of dates that are created when staff submits a log */
+            let dates = [];
+            let dateReference = attendanceReference.child("test");
+            dateReference.once('value', function(date_snapshot){
+                date_snapshot.forEach(function(date_childSnapshot){
+                    dates.push(date_childSnapshot.key);
+                    $("#att_attendanceTableDates").append("<td class='center' style='width: 100px;'>" + date_childSnapshot.key.substring(5) + "</td>")
+                })
+            })
+
+            /* For each student, we are going to grab their recorded attendance.
+               Green represents present
+               Red represents absent or not entered
+            */
             studentReference.once('value', function(student_snapshot){
-                student_snapshot.forEach(function(childSnapshot){
-                    if (loggedInUser.grade === (childSnapshot.val().grade)) {
-                        $("#ma_studentView").append(
-                        );
+                student_snapshot.forEach(function(student_childSnapshot){
+                    if (student_childSnapshot.val().grade === loggedInUser.grade) {
+                        let studentAttendance = "<th>" + student_childSnapshot.val().name + "</th>";
+                        for (let i = 0; i < dates.length; i ++){
+                            studentsAttendanceReference = attendanceReference.child(student_childSnapshot.val().name + '_' + student_childSnapshot.key).child(dates[i]);
+                            studentsAttendanceReference.on("value", function(attendance_snapshot){
+                                if (attendance_snapshot.val() === 'P') {
+                                    studentAttendance += "<td class='green' style='border: 1px solid black;'> </td>";
+                                }
+                                else {
+                                    studentAttendance += "<td class='red' style='border: 1px solid black;'> </td>";
+                                }
+                            })
+                        }
+                        setTimeout(function() {
+                            $("#att_attendanceTable").append("<tr id='att_attendanceTable_" + student_childSnapshot.val().name + "_" + student_childSnapshot.key + "'>" + studentAttendance + "</tr>");
+                        }, 1000);
                     }
                 })
             })

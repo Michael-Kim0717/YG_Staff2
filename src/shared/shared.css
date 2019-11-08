@@ -5,12 +5,12 @@
         table-layout: fixed;
     }
 
-    td, th {
+    #att_attendanceTable td, th {
         vertical-align: top;
         border-top: 1px solid #ccc;
         padding: 20px 0 40px 0;
     }
-    th {
+    #att_attendanceTable th {
         position: absolute;
         left: 0; 
         width: 150px;
