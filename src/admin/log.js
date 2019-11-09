@@ -86,8 +86,10 @@ $(document).ready(function(){
                     studentReference.once('value', function(student_snapshot){
                         student_snapshot.forEach(function(student_snapshot){
                             if (loggedInUser.grade === (student_snapshot.val().grade)) {
-                                const id = student_snapshot.val().name + "_" + student_snapshot.key,
-                                    absenceReason =student_snapshot.val().name + "_" + student_snapshot.key + "Absence";
+                                const name = student_snapshot.val().name.substring(0, student_snapshot.val().name.indexOf(" ")) + "_" + student_snapshot.val().name.substring(student_snapshot.val().name.indexOf(" ") + 1);
+                                const id = name + "_" + student_snapshot.key,
+                                    absenceReason = name + "_" + student_snapshot.key + "Absence";
+                                console.log(absenceReason);
                                 $("#ml_f_student").append(
                                     "<div class='student'>" +
                                         "<div class='col s5'>" +
@@ -158,7 +160,7 @@ $(document).ready(function(){
                                 var selected = [],
                                     attendance = [];
                                 $('.student input:checked').each(function() {
-                                    const id = $(this).attr('id');
+                                    let id = $(this).attr('id');
                                     selected.push($(this).attr('name') + ": " + $("#" + id + "Absence").val());
                                 });
                                 

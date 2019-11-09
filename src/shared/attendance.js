@@ -67,7 +67,8 @@ $(document).ready(function(){
                     if (student_childSnapshot.val().grade === loggedInUser.grade) {
                         let studentAttendance = "<th>" + student_childSnapshot.val().name + "</th>";
                         for (let i = 0; i < dates.length; i ++){
-                            studentsAttendanceReference = attendanceReference.child(student_childSnapshot.val().name + '_' + student_childSnapshot.key).child(dates[i]);
+                            let name = student_childSnapshot.val().name.substring(0, student_childSnapshot.val().name.indexOf(" ")) + "_" + student_childSnapshot.val().name.substring(student_childSnapshot.val().name.indexOf(" ") + 1);
+                            studentsAttendanceReference = attendanceReference.child(name + '_' + student_childSnapshot.key).child(dates[i]);
                             studentsAttendanceReference.on("value", function(attendance_snapshot){
                                 if (attendance_snapshot.val() === 'P') {
                                     studentAttendance += "<td class='green' style='border: 1px solid black;'> </td>";
@@ -78,7 +79,7 @@ $(document).ready(function(){
                             })
                         }
                         setTimeout(function() {
-                            $("#att_attendanceTable").append("<tr id='att_attendanceTable_" + student_childSnapshot.val().name + "_" + student_childSnapshot.key + "'>" + studentAttendance + "</tr>");
+                            $("#att_attendanceTable").append("<tr id='att_attendanceTable_" + name + "_" + student_childSnapshot.key + "'>" + studentAttendance + "</tr>");
                         }, 1000);
                     }
                 })
@@ -141,7 +142,8 @@ $(document).ready(function(){
                     if (student_childSnapshot.val().grade === gradeSelection) {
                         let studentAttendance = "<th>" + student_childSnapshot.val().name + "</th>";
                         for (let i = 0; i < dates.length; i ++){
-                            studentsAttendanceReference = attendanceReference.child(student_childSnapshot.val().name + '_' + student_childSnapshot.key).child(dates[i]);
+                            let name = student_childSnapshot.val().name.substring(0, student_childSnapshot.val().name.indexOf(" ")) + "_" + student_childSnapshot.val().name.substring(student_childSnapshot.val().name.indexOf(" ") + 1);
+                            studentsAttendanceReference = attendanceReference.child(name + '_' + student_childSnapshot.key).child(dates[i]);
                             studentsAttendanceReference.on("value", function(attendance_snapshot){
                                 if (attendance_snapshot.val() === 'P') {
                                     studentAttendance += "<td class='green' style='border: 1px solid black;'> </td>";
@@ -152,7 +154,7 @@ $(document).ready(function(){
                             })
                         }
                         setTimeout(function() {
-                            $("#att_attendanceTable").append("<tr id='att_attendanceTable_" + student_childSnapshot.val().name + "_" + student_childSnapshot.key + "'>" + studentAttendance + "</tr>");
+                            $("#att_attendanceTable").append("<tr id='att_attendanceTable_" + name + "_" + student_childSnapshot.key + "'>" + studentAttendance + "</tr>");
                         }, 1000);
                     }
                 })

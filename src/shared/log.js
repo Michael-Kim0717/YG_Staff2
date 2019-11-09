@@ -92,8 +92,9 @@ $(document).ready(function(){
                     studentReference.once('value', function(student_snapshot){
                         student_snapshot.forEach(function(student_snapshot){
                             if (loggedInUser.grade === (student_snapshot.val().grade)) {
-                                const id = student_snapshot.val().name + "_" + student_snapshot.key,
-                                    absenceReason =student_snapshot.val().name + "_" + student_snapshot.key + "Absence";
+                                const name = student_snapshot.val().name.substring(0, student_snapshot.val().name.indexOf(" ")) + "_" + student_snapshot.val().name.substring(student_snapshot.val().name.indexOf(" ") + 1);
+                                const id = name + "_" + student_snapshot.key,
+                                    absenceReason = name + "_" + student_snapshot.key + "Absence";
                                 $("#ml_f_student").append(
                                     "<div class='student'>" +
                                         "<div class='col s5'>" +
@@ -163,8 +164,8 @@ $(document).ready(function(){
                             else {
                                 var selected = [],
                                     attendance = [];
-                                const id = $(this).attr('id');
                                 $('.student input:checked').each(function() {
+                                    let id = $(this).attr('id');
                                     selected.push($(this).attr('name') + ": " + $("#" + id + "Absence").val());
                                 });
 
@@ -307,21 +308,10 @@ $(document).ready(function(){
                 /* Send Logs to Pastor Mike */
                 $("#al_sendLogs").on("click", function() {
                     console.log(missingLogs);
-                    let mailtoString = "mailto:test@test.com";
+                    let mailtoString = "mailto:m.alexander.kang@gmail.com";
                     
                     mailtoString = mailtoString + "?subject=Logs for " + getStartOfWeek(weekRange) + "&body=" + bodyString;
                     window.open(mailtoString);
-                    /* if (missingLogs.length === 0){
-                        mailtoString = mailtoString + "?subject=Logs for " + getStartOfWeek(weekRange) + "&body=" + bodyString;
-                        window.open(mailtoString);
-                    }
-                    else {
-                        $("#al_logSendError").empty();
-                        $("#al_logSendError").append(
-                            "<h6 class='error-noSideMargin'> Logs are currently missing </h6>"
-                        );
-                        console.log(allLogs);
-                    } */
                 });
 
                 /* Adds onto the missing log string depending on the current missing grades. */
