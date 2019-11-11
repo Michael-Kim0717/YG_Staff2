@@ -89,7 +89,6 @@ $(document).ready(function(){
                                 const name = student_snapshot.val().name.substring(0, student_snapshot.val().name.indexOf(" ")) + "_" + student_snapshot.val().name.substring(student_snapshot.val().name.indexOf(" ") + 1);
                                 const id = name + "_" + student_snapshot.key,
                                     absenceReason = name + "_" + student_snapshot.key + "Absence";
-                                console.log(absenceReason);
                                 $("#ml_f_student").append(
                                     "<div class='student'>" +
                                         "<div class='col s5'>" +

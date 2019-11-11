@@ -41,7 +41,9 @@ $(document).ready(function(){
             let logNavText = "Log";
             /* Removed 10/29/2019 */
             // let breakfastNavText = "Breakfast";
-            const whatsNewText = "";
+            const whatsNewText = 
+            "11/11: <br/>" +
+            "Mentors can now add students.";
 
             adminLogReference.once('value', function(logSnapshot){
                 logSnapshot.forEach(function(childSnapshot) {
@@ -89,6 +91,9 @@ $(document).ready(function(){
                 "</div>" + 
                 "<div id='attendanceNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 class='navigationText'> Attendance </h3>" +
+                "</div>" + 
+                "<div id='addStudentNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                    "<h3 class='navigationText'> Add Student </h3>" +
                 "</div>"
             );
 
@@ -111,6 +116,9 @@ $(document).ready(function(){
             });
             $("#attendanceNav").on("click", function(){
                 window.location.href = "/attendance";
+            });
+            $("#addStudentNav").on("click", function(){
+                window.location.href = "/addStudent";
             });
         }
         else if (role === 'admin') {
