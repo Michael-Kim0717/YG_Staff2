@@ -271,17 +271,17 @@ $(document).ready(function(){
                     );
                     bodyString = bodyString + 
                         log_childSnapshot.key + "%0D%0A" + 
-                        "Reflection: " + log_childSnapshot.val().reflection + "%0D%0A" +
-                        "Relational: " + log_childSnapshot.val().relational + "%0D%0A" +
-                        "Current Theme: " + log_childSnapshot.val().theme + "%0D%0A" +
-                        "Questions: " + log_childSnapshot.val().questionsPMike + "%0D%0A" +
+                        "Reflection: " + removeAnd(log_childSnapshot.val().reflection) + "%0D%0A" +
+                        "Relational: " + removeAnd(log_childSnapshot.val().relational) + "%0D%0A" +
+                        "Current Theme: " + removeAnd(log_childSnapshot.val().theme) + "%0D%0A" +
+                        "Questions: " + removeAnd(log_childSnapshot.val().questionsPMike) + "%0D%0A" +
                         "Missing Students: %0D%0A";
                     if (undefined !== log_childSnapshot.val().missingStudents) {
                         for (let i = 0; i < log_childSnapshot.val().missingStudents.length; i++) {
                             $("." + log_childSnapshot.key + weekRange).append(
                                 "<h6>" + log_childSnapshot.val().missingStudents[i] + "</h6>"
                             )
-                            bodyString = bodyString + log_childSnapshot.val().missingStudents[i] + "%0D%0A";
+                            bodyString = bodyString + removeAnd(log_childSnapshot.val().missingStudents[i]) + "%0D%0A";
                         }
                     }
                     if (undefined !== log_childSnapshot.val().attendance) {
@@ -343,8 +343,6 @@ $(document).ready(function(){
                             }
                         });
                         mailtoString = mailtoString + "?subject=Please Submit Logs!";
-                        console.log(emailList);
-                        console.log(mailtoString);
 
                         window.open(mailtoString);
                     });
@@ -360,6 +358,16 @@ $(document).ready(function(){
                 });
             });
         }
+    }
+
+    /* Removes all instance of the character '&' from string. */
+    function removeAnd (logSnippet) {
+        while (logSnippet.indexOf("&") !== -1) {
+            let andIndex = logSnippet.indexOf("&");
+            logSnippet = logSnippet.substring(0, andIndex) + "and" + logSnippet.substring(andIndex + 1);
+        }
+
+        return logSnippet;
     }
 
     /* Retrieves entire week range from Sunday to Saturday */
