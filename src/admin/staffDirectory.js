@@ -274,10 +274,8 @@ $(document).ready(function(){
                 const staffObject = {
                     name: name,
                     role: role,
-                    email: email
-                }
-                if (staffObject.role === 'mentor') {
-                    staffObject['grade'] = grade;
+                    email: email,
+                    grade: grade
                 }
                 $("#asm_f_error").empty();
                 $("#asm_f_error").append(

@@ -57,10 +57,14 @@ $(document).ready(function(){
                                         "<h6>" + childSnapshot.val().email + "</h6> <br/>" + 
                                         "<h6> <b> Phone Number: </b> </h6>" +
                                         "<h6>" + childSnapshot.val().phone_number + "</h6> <br/>" + 
+                                        "<h6> <b> Parent's Phone Number: </b> </h6>" +
+                                        "<h6>" + childSnapshot.val().parents_number + "</h6> <br/>" + 
                                         "<h6> <b> Birthday: </b> </h6>" +
                                         "<h6>" + childSnapshot.val().birthday + "</h6> <br/>" + 
                                         "<h6> <b> Address: </b> </h6>" +
                                         "<h6>" + childSnapshot.val().address + "</h6> <br/>" + 
+                                        "<h6> <b> Classes Taken: </b> </h6>" +
+                                        "<h6>" + childSnapshot.val().classes_taken + "</h6> <br/>" + 
                                     "</span>" + 
                                 "</div>" +
                             "</li>"
@@ -130,10 +134,14 @@ $(document).ready(function(){
                                         "<h6>" + student_childSnapshot.val().email + "</h6> <br/>" + 
                                         "<h6> <b> Phone Number: </b> </h6>" +
                                         "<h6>" + student_childSnapshot.val().phone_number + "</h6> <br/>" + 
+                                        "<h6> <b> Parent's Phone Number: </b> </h6>" +
+                                        "<h6>" + student_childSnapshot.val().parents_number + "</h6> <br/>" + 
                                         "<h6> <b> Birthday: </b> </h6>" +
                                         "<h6>" + student_childSnapshot.val().birthday + "</h6> <br/>" + 
                                         "<h6> <b> Address: </b> </h6>" +
                                         "<h6>" + student_childSnapshot.val().address + "</h6> <br/>" + 
+                                        "<h6> <b> Classes Taken: </b> </h6>" +
+                                        "<h6>" + student_childSnapshot.val().classes_taken + "</h6> <br/>" + 
                                         
                                         "<button class='btn' id='" + student_childSnapshot.key + "Edit'> Edit </button>" +
                                         "<button class='btn right' id='" + student_childSnapshot.key + "Delete'> Delete </button>" +
@@ -161,11 +169,15 @@ $(document).ready(function(){
                                         "<label for='ad_f_email'> Email Address </label>" +
                                     "</div>" +
                                     "<div class='input-field col s12'>" +
-                                        "<input id='ad_f_phoneNumber' value='" + student_childSnapshot.val().phone + "' type='number' class='validate'>" +
+                                        "<input id='ad_f_phoneNumber' value='" + student_childSnapshot.val().phone_number + "' type='text' class='validate'>" +
                                         "<label for='ad_f_phoneNumber'> Phone Number </label>" +
                                     "</div>" +
                                     "<div class='input-field col s12'>" +
-                                        "<input id='ad_f_birthday' value='" + student_childSnapshot.val().birthday + "' type='date' class='validate'>" +
+                                        "<input id='ad_f_parentsPhoneNumber' value='" + student_childSnapshot.val().parents_number + "' type='text' class='validate'>" +
+                                        "<label for='ad_f_parentsPhoneNumber'> Parent's Phone Number </label>" +
+                                    "</div>" +
+                                    "<div class='input-field col s12'>" +
+                                        "<input id='ad_f_birthday' value='" + student_childSnapshot.val().birthday + "' type='text' class='validate'>" +
                                         "<label for='ad_f_birthday'> Birthday </label>" +
                                     "</div>" +
                                     "<div class='input-field col s12'>" +
@@ -173,12 +185,8 @@ $(document).ready(function(){
                                         "<label for='ad_f_address'> Address </label>" +
                                     "</div>" +
                                     "<div class='input-field col s12'>" +
-                                        "<input id='ad_f_city' value='" + student_childSnapshot.val().city + "' type='text' class='validate'>" +
-                                        "<label for='ad_f_city'> City </label>" +
-                                    "</div>" +
-                                    "<div class='input-field col s12'>" +
-                                        "<input id='ad_f_state' value='" + student_childSnapshot.val().state + "' type='text' class='validate'>" +
-                                        "<label for='ad_f_state'> State </label>" +
+                                        "<input id='ad_f_classes_taken' value='" + student_childSnapshot.val().classes_taken + "' type='text' class='validate'>" +
+                                        "<label for='ad_f_classes_taken'> Classes Taken </label>" +
                                     "</div>" +
                                     
                                     "<button class='btn' id='" + student_childSnapshot.key + "Edit'> Edit </button>" +
@@ -192,11 +200,11 @@ $(document).ready(function(){
                                     name: $("#ad_f_name").val(),
                                     grade: $("#ad_f_grade").val(),
                                     address: $("#ad_f_address").val(),
-                                    city: $("#ad_f_city").val(),
-                                    state: $("#ad_f_state").val(),
                                     birthday: $("#ad_f_birthday").val(),
                                     email: $("#ad_f_email").val(),
-                                    phone: $("#ad_f_phoneNumber").val()
+                                    phone_number: $("#ad_f_phoneNumber").val(),
+                                    parents_number: $("#ad_f_parentsPhoneNumber").val(),
+                                    classes_taken: $("#ad_f_classes_taken").val()
                                 }
                                 studentReference.child(student_childSnapshot.key).set(studentObject);
                                 window.location.reload();
