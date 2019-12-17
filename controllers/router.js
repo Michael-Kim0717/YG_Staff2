@@ -20,6 +20,10 @@ module.exports = app => {
         response.render('generalPages/noPermission');
     });
 
+    app.get('/devo', (request, response) => {
+        response.render('generalPages/devo');
+    })
+
     app.get('/log', (request, response) => {
         response.render('generalPages/log');
     });
@@ -56,6 +60,10 @@ module.exports = app => {
 
     app.get('/adminLog', (request, response) => {
         response.render('adminPages/log');
+    });
+
+    app.get('/adminDevo', (request, response) => {
+        response.render('adminPages/devo');
     });
 
     app.post('/sendMassEmail', (request, response) => {

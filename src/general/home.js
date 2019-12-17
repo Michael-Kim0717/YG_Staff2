@@ -2,6 +2,7 @@ $(document).ready(function(){
  
     /* Today's date for logging purposes */
     const weekRange = getWeekRange(new Date());
+    const weekRangeForDevo = getWeekRangeForDevo(new Date());
 
     const staffReference = firebase.database().ref('/Staff');
     const adminLogReference = firebase.database().ref('/Log/' + weekRange);
@@ -23,7 +24,7 @@ $(document).ready(function(){
                     }
                 });
                 
-                appendPage(loggedInUser.role, loggedInUser.grade);
+                appendPage(loggedInUser.role, loggedInUser.name, loggedInUser.grade);
             });
         }
         else {
@@ -31,7 +32,9 @@ $(document).ready(function(){
         }
     });
 
-    function appendPage (role, grade) {
+    const devoReference = firebase.database().ref('/Devo/' + weekRangeForDevo);
+
+    function appendPage (role, name, grade) {
         const welcomeText = "Welcome " + retrieveFirstName(loggedInUser.name);
         if (role === 'mentor') {
             /* Mentor Home Page:
@@ -39,6 +42,7 @@ $(document).ready(function(){
                 Check to see if the mentor has already completed log and/or breakfast.
             */
             let logNavText = "Log";
+            let devoNavText = "Devo";
             /* Removed 10/29/2019 */
             // let breakfastNavText = "Breakfast";
             const whatsNewText = 
@@ -54,7 +58,19 @@ $(document).ready(function(){
                         );
                     }
                 })
-            });                    
+            });    
+            
+            devoReference.once('value', function(devoSnapshot){
+                devoSnapshot.forEach(function(childSnapshot) {
+                    console.log(childSnapshot);
+                    if (childSnapshot.key === replaceSpaces(name) + grade && childSnapshot.val().submitted === 'y'){
+                        $("#devoNavText").empty();
+                        $("#devoNavText").append(
+                            "Completed"
+                        );
+                    }
+                })
+            });
             /* Removed 10/29/2019 */
             /* firebase.database().ref('/Breakfast/' + weekRange + '/completed').once('value', function(breakfastSnapshot){
                 breakfastSnapshot.forEach(function(childSnapshot) {
@@ -82,6 +98,9 @@ $(document).ready(function(){
                 "<div id='logNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='logNavText' class='navigationText'>" + logNavText + "</h3>" +
                 "</div>" +
+                "<div id='devoNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                    "<h3 id='devoNavText' class='navigationText'>" + devoNavText + "</h3>" +
+                "</div>" +
                 /* Removed 10/29/2019 */
                 /* "<div id='breakfastNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='breakfastNavText' class='navigationText'>" + breakfastNavText + "</h3>" +
@@ -103,6 +122,11 @@ $(document).ready(function(){
             $("#logNav").on("click", function(){
                 if ($("#logNavText").text().trim() !== 'Completed') {
                     window.location.href = "/log"; 
+                }
+            });
+            $("#devoNav").on("click", function(){
+                if ($("#devoNavText").text().trim() !== 'Completed') {
+                    window.location.href = "/devo";
                 }
             });
             /* Removed 10/29/2019 */  
@@ -146,6 +170,12 @@ $(document).ready(function(){
                 "<div id='logNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='logNavText' class='navigationText'> Log </h3>" +
                 "</div>" +
+                "<div id='devoSubmitNav' class=''>" +
+                    
+                "</div>" +
+                "<div id='devoNav' class='s10 offset-s1 navigation valign-wrapper'>" +
+                    "<h3 id='devoNavText' class='navigationText'> Devo </h3>" +
+                "</div>" +
                 /* Removed 10/29/2019 */
                 /* "<div id='breakfastNav' class='s10 offset-s1 navigation valign-wrapper'>" +
                     "<h3 id='breakfastNavText' class='navigationText'> Breakfast </h3>" +
@@ -171,9 +201,24 @@ $(document).ready(function(){
                 adminLogReference.once('value', function(logSnapshot){
                     logSnapshot.forEach(function(childSnapshot) {
                         if (childSnapshot.key === grade) {
-                            console.log(childSnapshot.key);
                             $("#submitLogNavText").empty();
                             $("#submitLogNavText").append(
+                                "Completed"
+                            );
+                        }
+                    })
+                }); 
+
+                $("#devoSubmitNav").addClass("s10 offset-s1 navigation valign-wrapper");
+                $("#devoSubmitNav").append("<h3 id='submitDevoNavText' class='navigationText'> Submit Devo </h3>");
+
+                devoReference.once('value', function(devoSnapshot){
+                    console.log(devoSnapshot.key)
+                    devoSnapshot.forEach(function(childSnapshot) {
+                        console.log(childSnapshot.key)
+                        if (childSnapshot.key === replaceSpaces(name) + grade && childSnapshot.val().submitted === 'y') {
+                            $("#submitDevoNavText").empty();
+                            $("#submitDevoNavText").append(
                                 "Completed"
                             );
                         }
@@ -192,6 +237,14 @@ $(document).ready(function(){
             $("#logNav").on("click", function(){
                 window.location.href = "/log"; 
             });  
+            $("#devoSubmitNav").on("click", function(){
+                if ($("#submitDevoNavText").text().trim() !== 'Completed') {
+                    window.location.href = "/adminDevo"; 
+                }
+            });  
+            $("#devoNav").on("click", function(){
+                window.location.href = "/devo"; 
+            });  
             /* Removed 10/29/2019 */
             /* $("#breakfastNav").on("click", function(){
                 window.location.href = "/breakfast"; 
@@ -209,6 +262,45 @@ $(document).ready(function(){
                 window.location.href = "/attendance";
             });
         }
+    }
+
+    function replaceSpaces (name) {
+        while (name.indexOf(" ") !== -1) {
+            let spaceIndex = name.indexOf(" ");
+            name = name.substring(0, spaceIndex) + "_" + name.substring(spaceIndex + 1);
+        }
+
+        return name;
+    }
+
+    /* Retrieves entire week range from Monday to Sunday */
+    function getWeekRangeForDevo(today) {
+        startOfWeekDay = today.getDate() - today.getDay() + 1;
+        startOfWeekMonth = today.getMonth() + 1;
+        endOfWeekMonth = today.getMonth() + 1;
+        startOfWeekYear = today.getFullYear();
+        endOfWeekYear = today.getFullYear();
+        if (startOfWeekDay <= 0) {
+            if (startOfWeekMonth == 3 && startOfWeekYear%4 == 0) {
+                startOfWeekDay++;
+            }
+            startOfWeekMonth -= 1;
+            if (startOfWeekMonth == 0) {
+                startOfWeekMonth = 12;
+                startOfWeekYear --;
+            }
+            let daysInMonth = daysInCurrentMonth(startOfWeekMonth);
+            startOfWeekDay += daysInMonth;
+        }
+        else if (startOfWeekDay < 10) {
+            startOfWeekDay = '0' + startOfWeekDay;
+        }
+        if (startOfWeekMonth < 10) {
+            startOfWeekMonth = '0' + startOfWeekMonth;
+        }
+        today = startOfWeekYear.toString() + startOfWeekMonth.toString() + startOfWeekDay.toString() + "-" + endOfWeek(parseInt(endOfWeekYear), parseInt(endOfWeekMonth), parseInt(today.getDate() + (7 - today.getDay())));
+        
+        return today;
     }
 
     /* Retrieves entire week range from Sunday to Saturday */
